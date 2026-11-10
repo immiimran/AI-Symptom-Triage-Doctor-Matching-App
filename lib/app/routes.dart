@@ -26,7 +26,7 @@ class AppRoutes {
     login: (_) => const LoginScreen(),
     register: (_) => const RegisterScreen(),
     home: (_) => const MainShell(),
-    // TODO: replace these placeholders as each screen is built.
+    // Temporary placeholders until the corresponding screens are implemented.
     symptom: (_) => const PlaceholderScreen(title: 'Symptom Input'),
     doctors: (_) => const PlaceholderScreen(title: 'Doctors'),
     doctorDetails: (_) => const PlaceholderScreen(title: 'Doctor Details'),

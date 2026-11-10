@@ -6,6 +6,7 @@ import '../../providers/auth_provider.dart';
 import '../../texts/app_texts.dart';
 import '../../utils/greeting.dart';
 
+// ignore: unintended_html_in_doc_comment
 /// "Hello <name>" + time-based greeting + notification bell.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, this.onBellTap});
