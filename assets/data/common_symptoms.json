@@ -1,0 +1,62 @@
+[
+    {
+        "id": "fever",
+        "en": "Fever",
+        "bn": "জ্বর"
+    },
+    {
+        "id": "headache",
+        "en": "Headache",
+        "bn": "মাথাব্যথা"
+    },
+    {
+        "id": "cough",
+        "en": "Cough",
+        "bn": "কাশি"
+    },
+    {
+        "id": "chest_pain",
+        "en": "Chest pain",
+        "bn": "বুকে ব্যথা"
+    },
+    {
+        "id": "breathing",
+        "en": "Shortness of breath",
+        "bn": "শ্বাসকষ্ট"
+    },
+    {
+        "id": "stomach_pain",
+        "en": "Stomach pain",
+        "bn": "পেটে ব্যথা"
+    },
+    {
+        "id": "vomiting",
+        "en": "Vomiting",
+        "bn": "বমি"
+    },
+    {
+        "id": "rash",
+        "en": "Skin rash",
+        "bn": "ত্বকে ফুসকুড়ি"
+    },
+    {
+        "id": "joint_pain",
+        "en": "Joint pain",
+        "bn": "জোড়ায় ব্যথা"
+    },
+    {
+        "id": "sore_throat",
+        "en": "Sore throat",
+        "bn": "গলা ব্যথা"
+    },
+    {
+        "id": "dizziness",
+        "en": "Dizziness",
+        "bn": "মাথা ঘোরা"
+    },
+    {
+        "id": "ear_pain",
+        "en": "Ear pain",
+        "bn": "কানে ব্যথা"
+    }
+]

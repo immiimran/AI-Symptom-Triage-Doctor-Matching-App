@@ -7,4 +7,5 @@ class AppAssets {
   static const String logoMarkPng = 'assets/images/logo/logo1024.png';
   static const String specialtiesJson = 'assets/data/specialties.json';
   static const String doctorsJson = 'assets/data/doctors_seed.json';
+  static const String commonSymptomsJson = 'assets/data/common_symptoms.json';
 }
