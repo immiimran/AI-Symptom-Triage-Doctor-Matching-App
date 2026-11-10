@@ -1,0 +1,52 @@
+[
+    {
+        "id": "general",
+        "name": "General Medicine",
+        "name_bn": "সাধারণ চিকিৎসক"
+    },
+    {
+        "id": "cardiology",
+        "name": "Cardiologist",
+        "name_bn": "হৃদরোগ বিশেষজ্ঞ"
+    },
+    {
+        "id": "neurology",
+        "name": "Neurologist",
+        "name_bn": "স্নায়ুরোগ বিশেষজ্ঞ"
+    },
+    {
+        "id": "gastro",
+        "name": "Gastroenterologist",
+        "name_bn": "গ্যাস্ট্রো বিশেষজ্ঞ"
+    },
+    {
+        "id": "orthopedics",
+        "name": "Orthopedic",
+        "name_bn": "হাড় ও জোড়া বিশেষজ্ঞ"
+    },
+    {
+        "id": "dermatology",
+        "name": "Dermatologist",
+        "name_bn": "চর্মরোগ বিশেষজ্ঞ"
+    },
+    {
+        "id": "gynecology",
+        "name": "Gynecologist",
+        "name_bn": "গাইনি বিশেষজ্ঞ"
+    },
+    {
+        "id": "pediatrics",
+        "name": "Pediatrician",
+        "name_bn": "শিশু বিশেষজ্ঞ"
+    },
+    {
+        "id": "ent",
+        "name": "ENT",
+        "name_bn": "নাক-কান-গলা বিশেষজ্ঞ"
+    },
+    {
+        "id": "eye",
+        "name": "Eye Specialist",
+        "name_bn": "চক্ষু বিশেষজ্ঞ"
+    }
+]

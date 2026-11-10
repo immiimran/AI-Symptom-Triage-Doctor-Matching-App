@@ -11,4 +11,10 @@ class AppConstants {
   static const Duration splashAnimation = Duration(milliseconds: 900);
     /// App display name used by MaterialApp.
   static const String appName = 'Curely';
+  
+    /// Number of doctors shown in "Popular Doctors" on Home.
+  static const int popularDoctorCount = 5;
+
+  /// Currency symbol shown before fees.
+  static const String currencySymbol = '৳';
 }

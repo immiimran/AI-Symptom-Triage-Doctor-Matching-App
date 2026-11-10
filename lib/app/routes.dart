@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../screens/auth/login_screen.dart';
+import '../screens/auth/register_screen.dart';
+import '../screens/home/main_shell.dart';
 import '../screens/onboarding/onboarding_screen.dart';
 import '../screens/splash/splash_screen.dart';
 import '../widgets/placeholder_screen.dart';
@@ -11,13 +14,21 @@ class AppRoutes {
   static const String splash = '/';
   static const String onboarding = '/onboarding';
   static const String login = '/login';
+  static const String register = '/register';
   static const String home = '/home';
+  static const String symptom = '/symptom';
+  static const String doctors = '/doctors';
+  static const String doctorDetails = '/doctor-details';
 
   static Map<String, WidgetBuilder> get routes => {
     splash: (_) => const SplashScreen(),
     onboarding: (_) => const OnboardingScreen(),
-    // Temporary screens for routes whose implementations are not available yet.
-    login: (_) => const PlaceholderScreen(title: 'Login'),
-    home: (_) => const PlaceholderScreen(title: 'Home'),
+    login: (_) => const LoginScreen(),
+    register: (_) => const RegisterScreen(),
+    home: (_) => const MainShell(),
+    // TODO: replace these placeholders as each screen is built.
+    symptom: (_) => const PlaceholderScreen(title: 'Symptom Input'),
+    doctors: (_) => const PlaceholderScreen(title: 'Doctors'),
+    doctorDetails: (_) => const PlaceholderScreen(title: 'Doctor Details'),
   };
 }
