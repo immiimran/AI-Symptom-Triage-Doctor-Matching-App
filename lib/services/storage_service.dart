@@ -9,6 +9,30 @@ class StorageService {
   static const String _keyFavorites = 'favorite_doctor_ids';
   static const String _keyAppointments = 'appointments_json';
 
+  static const String _keySymptomHistory = 'symptom_history_json';
+
+  static const String _keyMyReviews = 'my_reviews_json';
+
+  Future<String?> getMyReviewsJson() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyMyReviews);
+  }
+
+  Future<void> saveMyReviewsJson(String json) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyMyReviews, json);
+  }
+
+  Future<String?> getSymptomHistoryJson() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keySymptomHistory);
+  }
+
+  Future<void> saveSymptomHistoryJson(String json) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keySymptomHistory, json);
+  }
+
   Future<bool> getLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_keyLoggedIn) ?? false;

@@ -47,4 +47,6 @@ class AppColors {
 
   static const Color star = Color(0xFFF5B301);
   static const Color shadow = Color(0x14000000);
+  static const Color urgent = Color(0xFFE8710A);
+  static const Color sheetFill = Color(0xF2240D17); // bottom sheet background
 }

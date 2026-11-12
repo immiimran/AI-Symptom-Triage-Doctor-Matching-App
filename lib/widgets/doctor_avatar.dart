@@ -11,6 +11,7 @@ class DoctorAvatar extends StatelessWidget {
     this.size = 64,
     this.radius = 16,
     this.showStatusDot = false,
+    this.onDark = false,
   });
 
   final DoctorModel doctor;
@@ -19,6 +20,9 @@ class DoctorAvatar extends StatelessWidget {
 
   /// Shows a green dot when the doctor sits today.
   final bool showStatusDot;
+
+  /// Use light initials colors on dark glass screens.
+  final bool onDark;
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +65,14 @@ class DoctorAvatar extends StatelessWidget {
 
   Widget _initials() {
     return Container(
-      color: AppColors.primary.withValues(alpha: 0.12),
+      color: onDark
+          ? Colors.white.withValues(alpha: 0.18)
+          : AppColors.primary.withValues(alpha: 0.12),
       alignment: Alignment.center,
       child: Text(
         doctor.initials,
         style: TextStyle(
-          color: AppColors.primary,
+          color: onDark ? Colors.white : AppColors.primary,
           fontSize: size * 0.34,
           fontWeight: FontWeight.w700,
         ),

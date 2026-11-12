@@ -3,11 +3,11 @@ import 'package:provider/provider.dart';
 
 import '../../app/color.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/language_provider.dart';
 import '../../texts/app_texts.dart';
 import '../../utils/greeting.dart';
 
-// ignore: unintended_html_in_doc_comment
-/// "Hello <name>" + time-based greeting + notification bell.
+/// "Hello <name>", time-based greeting, language switch and notification bell.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, this.onBellTap});
 
@@ -16,6 +16,7 @@ class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final name = context.watch<AuthProvider>().firstName;
+    final language = context.watch<LanguageProvider>();
     final textTheme = Theme.of(context).textTheme;
 
     return Row(
@@ -42,6 +43,14 @@ class HomeHeader extends StatelessWidget {
             ],
           ),
         ),
+        // Shows the language you will switch TO.
+        _LanguageButton(
+          label: language.isBangla ? t('lang_name_en') : t('lang_name_bn'),
+          onTap: () => language.setLanguage(
+            language.isBangla ? AppLanguage.en : AppLanguage.bn,
+          ),
+        ),
+        const SizedBox(width: 10),
         Material(
           color: AppColors.surface,
           elevation: 1,
@@ -51,8 +60,8 @@ class HomeHeader extends StatelessWidget {
             customBorder: const CircleBorder(),
             onTap: onBellTap,
             child: SizedBox(
-              width: 48,
-              height: 48,
+              width: 44,
+              height: 44,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -61,8 +70,8 @@ class HomeHeader extends StatelessWidget {
                     color: AppColors.textDark,
                   ),
                   Positioned(
-                    top: 12,
-                    right: 14,
+                    top: 11,
+                    right: 12,
                     child: Container(
                       width: 9,
                       height: 9,
@@ -78,6 +87,49 @@ class HomeHeader extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _LanguageButton extends StatelessWidget {
+  const _LanguageButton({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.surface,
+      elevation: 1,
+      shadowColor: AppColors.shadow,
+      borderRadius: BorderRadius.circular(22),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.translate_rounded,
+                size: 18,
+                color: AppColors.primary,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

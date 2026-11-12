@@ -9,12 +9,19 @@ class AppConstants {
 
   /// Logo entrance animation length.
   static const Duration splashAnimation = Duration(milliseconds: 900);
-    /// App display name used by MaterialApp.
+
+  /// App display name used by MaterialApp.
   static const String appName = 'Curely';
-  
-    /// Number of doctors shown in "Popular Doctors" on Home.
+
+  /// Number of doctors shown in "Popular Doctors" on Home.
   static const int popularDoctorCount = 5;
 
   /// Currency symbol shown before fees.
   static const String currencySymbol = '৳';
+
+  /// National emergency number (Bangladesh).
+  static const String emergencyNumber = '999';
+
+  /// How many past symptom checks are kept in history.
+  static const int historyLimit = 50;
 }
