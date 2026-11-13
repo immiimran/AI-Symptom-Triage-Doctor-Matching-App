@@ -213,4 +213,73 @@ const Map<String, String> enTexts = {
   'no_favorites_hint': 'Tap the heart on a doctor to save them here.',
   'added_favorite': 'Added to favorites',
   'removed_favorite': 'Removed from favorites',
+  // ---- Booking ----
+  'booking_title': 'Book appointment',
+  'select_date': 'Select date',
+  'select_time': 'Select time',
+  'serial_hint':
+      'Each time is a serial number. An earlier time means an earlier serial.',
+  'period_all': 'All',
+  'period_morning': 'Morning',
+  'period_afternoon': 'Afternoon',
+  'period_evening': 'Evening',
+  'slot_booked_legend': 'Crossed out times are already booked.',
+  'no_slots': 'No time left for this day. Please pick another date.',
+  'patient_details': 'Patient details',
+  'patient_name': 'Patient name',
+  'patient_age': 'Age',
+  'patient_gender': 'Gender (optional)',
+  'gender_other': 'Other',
+  'visit_reason': 'Reason for visit (optional)',
+  'booking_summary': 'Summary',
+  'summary_date': 'Date',
+  'summary_time': 'Time',
+  'summary_serial': 'Serial number',
+  'confirm_booking': 'Confirm booking',
+  'select_slot_first': 'Please select a date and a time.',
+  'err_age': 'Enter a valid age (0-120).',
+  'booking_failed': 'Could not book. Please try again.',
+  'slot_just_taken': 'This time was just taken. Please pick another.',
+  // ---- Booking success ----
+  'booking_confirmed': 'Appointment confirmed!',
+  'booking_confirmed_hint': 'Show this serial number at the chamber.',
+  'your_serial': 'Your serial number',
+  'arrive_by': 'Please arrive by',
+  'tips_title': 'Before you go',
+  'tip_arrive_early':
+      'Arrive about 15 minutes early so you do not lose your serial.',
+  'tip_bring_documents': 'Bring your ID, old prescriptions and test reports.',
+  'tip_keep_fee': 'Keep the consultation fee ready.',
+  'tip_call_late': 'Call the chamber if you are running late.',
+  'tip_spec_general':
+      'Write down your medicines and any allergies to tell the doctor.',
+  'tip_spec_cardiology': 'Bring your ECG, echo or blood pressure records.',
+  'tip_spec_neurology':
+      'Note how often the symptoms happen and what triggers them.',
+  'tip_spec_gastro':
+      'Note what you ate before the pain and any medicine you take.',
+  'tip_spec_orthopedics': 'Bring X-ray or MRI films and wear loose clothes.',
+  'tip_spec_dermatology':
+      'Do not apply new creams just before the visit. Bring the ones you use.',
+  'tip_spec_gynecology':
+      'Bring earlier ultrasound reports and note your last period date.',
+  'tip_spec_pediatrics':
+      "Bring the child's vaccination card and weight records.",
+  'tip_spec_ent': 'Bring any earlier hearing test or X-ray reports.',
+  'tip_spec_eye': 'Bring your current glasses and eye reports.',
+  'back_to_home': 'Back to Home',
+  // ---- Reminder ----
+  'reminder_notification_title': 'Appointment reminder',
+  'reminder_section': 'Remind me',
+  'reminder_off': 'No reminder',
+  'reminder_1_day': '1 day before',
+  'reminder_3_hours': '3 hours before',
+  'reminder_1_hour': '1 hour before',
+  'reminder_test': 'In 1 minute (test)',
+  'reminder_set': 'Reminder set.',
+  'reminder_cancelled': 'Reminder turned off.',
+  'reminder_denied':
+      'Notifications are blocked. Please allow them in Settings.',
+  'reminder_too_late': 'It is too late for this reminder time.',
+  'reminder_unavailable': 'Reminders are not supported on this device.',
 };

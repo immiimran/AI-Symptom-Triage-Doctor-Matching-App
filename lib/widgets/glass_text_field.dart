@@ -16,6 +16,7 @@ class GlassTextField extends StatefulWidget {
     this.textInputAction,
     this.onSubmitted,
     this.autofillHints,
+    this.maxLines = 1,
   });
 
   final String label;
@@ -28,6 +29,9 @@ class GlassTextField extends StatefulWidget {
   final ValueChanged<String>? onSubmitted;
   final Iterable<String>? autofillHints;
 
+  /// Use more than 1 for a multi-line box (ignored for passwords).
+  final int maxLines;
+
   @override
   State<GlassTextField> createState() => _GlassTextFieldState();
 }
@@ -38,6 +42,7 @@ class _GlassTextFieldState extends State<GlassTextField> {
   @override
   Widget build(BuildContext context) {
     final radius = BorderRadius.circular(14);
+    final lines = widget.isPassword ? 1 : widget.maxLines;
 
     OutlineInputBorder border(Color color, [double width = 1]) {
       return OutlineInputBorder(
@@ -61,11 +66,15 @@ class _GlassTextFieldState extends State<GlassTextField> {
         TextFormField(
           controller: widget.controller,
           validator: widget.validator,
-          keyboardType: widget.keyboardType,
+          keyboardType:
+              widget.keyboardType ??
+              (lines > 1 ? TextInputType.multiline : null),
           textInputAction: widget.textInputAction,
           onFieldSubmitted: widget.onSubmitted,
           autofillHints: widget.autofillHints,
           obscureText: widget.isPassword && _obscure,
+          minLines: lines > 1 ? lines : null,
+          maxLines: lines,
           style: const TextStyle(color: AppColors.onGlass),
           cursorColor: AppColors.onGlass,
           decoration: InputDecoration(

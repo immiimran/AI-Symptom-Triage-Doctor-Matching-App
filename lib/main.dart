@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'app/app.dart';
 import 'app/constants.dart';
 import 'providers/language_provider.dart';
+import 'services/notification_service.dart';
 
 /// App entry point. Keep this file small: only startup initialisation.
 Future<void> main() async {
@@ -17,6 +18,9 @@ Future<void> main() async {
   // [Onboarding] Load the saved language before the first frame.
   final languageProvider = LanguageProvider();
   await languageProvider.load();
+
+  // [Booking] Prepare reminder notifications (never crashes the app).
+  await NotificationService.instance.init();
 
   // ---- ADD NEW STARTUP INITIALISATION ABOVE THIS LINE ----
 

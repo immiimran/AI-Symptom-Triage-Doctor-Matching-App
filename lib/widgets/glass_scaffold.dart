@@ -4,8 +4,9 @@ import '../app/color.dart';
 import 'glass_background.dart';
 import 'glass_icon_button.dart';
 
-/// Page layout for glass screens: gradient background, title bar with back
-/// button, content, and an optional bar at the bottom.
+/// Page layout for glass screens: gradient background (without the light
+/// bottom sphere), title bar with back button, content, and an optional
+/// bar at the bottom.
 class GlassScaffold extends StatelessWidget {
   const GlassScaffold({
     super.key,
@@ -28,6 +29,7 @@ class GlassScaffold extends StatelessWidget {
 
     return Scaffold(
       body: GlassBackground(
+        showSilverSphere: false,
         child: SafeArea(
           child: Column(
             children: [

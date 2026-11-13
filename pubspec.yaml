@@ -39,7 +39,7 @@ dependencies:
   intl: ^0.20.3
   flutter_svg: ^2.3.2
   speech_to_text: ^7.5.0
-  flutter_local_notifications: ^23.0.0
+  flutter_local_notifications: ^23.0.2
   timezone: ^0.11.2
   url_launcher: ^6.3.3
   permission_handler: ^13.0.2

@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../app/color.dart';
 
-/// Dark gradient background with two soft spheres (glassmorphism style).
+/// Dark gradient background with soft spheres (glassmorphism style).
 class GlassBackground extends StatelessWidget {
-  const GlassBackground({super.key, required this.child});
+  const GlassBackground({
+    super.key,
+    required this.child,
+    this.showSilverSphere = true,
+  });
 
   final Widget child;
+
+  /// The light sphere at the bottom-left can hide text. Glass pages built
+  /// with GlassScaffold turn it off. Login and Register keep it.
+  final bool showSilverSphere;
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +42,16 @@ class GlassBackground extends StatelessWidget {
               deep: AppColors.sphereRoseDeep,
             ),
           ),
-          const Positioned(
-            bottom: -70,
-            left: -60,
-            child: _Sphere(
-              size: 280,
-              light: AppColors.sphereSilver,
-              deep: AppColors.sphereSilverDeep,
+          if (showSilverSphere)
+            const Positioned(
+              bottom: -70,
+              left: -60,
+              child: _Sphere(
+                size: 280,
+                light: AppColors.sphereSilver,
+                deep: AppColors.sphereSilverDeep,
+              ),
             ),
-          ),
           child,
         ],
       ),

@@ -7,7 +7,7 @@ import '../texts/app_texts.dart';
 class DoctorSchedule {
   DoctorSchedule._();
 
-  static const List<String> _dayCodes = [
+  static const List<String> dayCodes = [
     'mon',
     'tue',
     'wed',
@@ -17,14 +17,19 @@ class DoctorSchedule {
     'sun',
   ];
 
+  /// Day code ('mon' ... 'sun') of a date.
+  static String dayCode(DateTime date) => dayCodes[date.weekday - 1];
+
+  /// True if the doctor sits on this date.
+  static bool sitsOn(DoctorModel doctor, DateTime date) =>
+      doctor.chamberDays.contains(dayCode(date));
+
   /// First date (today or later, within 14 days) when the doctor sits.
   static DateTime? nextAvailable(DoctorModel doctor, [DateTime? from]) {
     final start = from ?? DateTime.now();
     for (var i = 0; i < 14; i++) {
       final date = DateTime(start.year, start.month, start.day + i);
-      if (doctor.chamberDays.contains(_dayCodes[date.weekday - 1])) {
-        return date;
-      }
+      if (sitsOn(doctor, date)) return date;
     }
     return null;
   }

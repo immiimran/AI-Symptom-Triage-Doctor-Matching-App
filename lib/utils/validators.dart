@@ -31,6 +31,13 @@ class Validators {
     return null;
   }
 
+  /// Age between 0 and 120.
+  static String? age(String? value) {
+    final age = int.tryParse((value ?? '').trim());
+    if (age == null || age < 0 || age > 120) return t('err_age');
+    return null;
+  }
+
   /// Validator that checks the value matches [original].
   static String? Function(String?) confirmPassword(
     TextEditingController original,
