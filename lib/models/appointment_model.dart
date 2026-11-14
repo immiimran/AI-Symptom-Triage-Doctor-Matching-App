@@ -45,6 +45,7 @@ class AppointmentModel {
 
   AppointmentModel copyWith({
     DateTime? dateTime,
+    int? serialNumber,
     AppointmentStatus? status,
     int? reminderMinutes,
     bool clearReminder = false,
@@ -54,7 +55,7 @@ class AppointmentModel {
       doctorId: doctorId,
       patientName: patientName,
       dateTime: dateTime ?? this.dateTime,
-      serialNumber: serialNumber,
+      serialNumber: serialNumber ?? this.serialNumber,
       status: status ?? this.status,
       note: note,
       patientAge: patientAge,

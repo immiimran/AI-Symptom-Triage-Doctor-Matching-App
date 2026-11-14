@@ -27,9 +27,12 @@ class AppointmentProvider extends ChangeNotifier {
 
   List<AppointmentModel> get all => List.unmodifiable(_items);
 
+  /// An appointment counts as past one hour after its start time.
+  DateTime get _cutoff => DateTime.now().subtract(const Duration(hours: 1));
+
   /// Upcoming appointments, soonest first.
   List<AppointmentModel> get upcoming {
-    final cutoff = DateTime.now().subtract(const Duration(hours: 1));
+    final cutoff = _cutoff;
     return _items
         .where(
           (a) =>
@@ -38,6 +41,26 @@ class AppointmentProvider extends ChangeNotifier {
         )
         .toList()
       ..sort((a, b) => a.dateTime.compareTo(b.dateTime));
+  }
+
+  /// Completed appointments and those whose time has passed, newest first.
+  List<AppointmentModel> get past {
+    final cutoff = _cutoff;
+    return _items
+        .where(
+          (a) =>
+              a.status == AppointmentStatus.completed ||
+              (a.status == AppointmentStatus.upcoming &&
+                  !a.dateTime.isAfter(cutoff)),
+        )
+        .toList()
+      ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
+  }
+
+  /// Cancelled appointments, newest first.
+  List<AppointmentModel> get cancelled {
+    return _items.where((a) => a.status == AppointmentStatus.cancelled).toList()
+      ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
   }
 
   AppointmentModel? byId(String id) {
@@ -61,7 +84,7 @@ class AppointmentProvider extends ChangeNotifier {
     final raw = await _storage.getAppointmentsJson();
 
     if (raw == null) {
-      // First launch. In demo mode add one sample so Home is not empty.
+      // First launch. In demo mode add samples so the screens are not empty.
       _items = AppConstants.demoMode ? await _buildDemoAppointments() : [];
       await _save();
     } else {
@@ -116,6 +139,36 @@ class AppointmentProvider extends ChangeNotifier {
       ),
     );
     await _save();
+  }
+
+  /// Moves an appointment to a new time and serial. If it had a reminder,
+  /// the reminder is set again for the new time.
+  /// Returns null when there was no reminder, otherwise the reminder result.
+  Future<ReminderResult?> reschedule({
+    required AppointmentModel appointment,
+    required DoctorModel doctor,
+    required DateTime newDateTime,
+    required int newSerial,
+  }) async {
+    final oldMinutes = appointment.reminderMinutes;
+    await NotificationService.instance.cancel(appointment.notificationId);
+
+    final moved = appointment.copyWith(
+      dateTime: newDateTime,
+      serialNumber: newSerial,
+      clearReminder: true,
+    );
+    _replace(moved);
+    await _save();
+
+    if (oldMinutes == null || oldMinutes == AppConstants.testReminderMinutes) {
+      return null;
+    }
+    return setReminder(
+      appointment: moved,
+      doctor: doctor,
+      minutesBefore: oldMinutes,
+    );
   }
 
   /// Turns the reminder on ([minutesBefore]) or off (null).
@@ -177,15 +230,26 @@ class AppointmentProvider extends ChangeNotifier {
     try {
       final doctors = await _doctorService.loadDoctors();
       if (doctors.isEmpty) return [];
+      final first = doctors.first;
+      final second = doctors.length > 1 ? doctors[1] : first;
       final now = DateTime.now();
       return [
         AppointmentModel(
           id: 'demo_001',
-          doctorId: doctors.first.id,
+          doctorId: first.id,
           patientName: 'Demo Patient',
           dateTime: DateTime(now.year, now.month, now.day + 1, 17, 0),
           serialNumber: 4,
-          fee: doctors.first.fee,
+          fee: first.fee,
+        ),
+        AppointmentModel(
+          id: 'demo_002',
+          doctorId: second.id,
+          patientName: 'Demo Patient',
+          dateTime: DateTime(now.year, now.month, now.day - 3, 17, 0),
+          serialNumber: 3,
+          status: AppointmentStatus.completed,
+          fee: second.fee,
         ),
       ];
     } catch (_) {

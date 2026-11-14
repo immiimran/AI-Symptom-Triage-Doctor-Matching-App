@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/color.dart';
-import '../../app/constants.dart';
 import '../../app/routes.dart';
 import '../../models/doctor_model.dart';
 import '../../models/time_slot.dart';
@@ -13,10 +12,8 @@ import '../../providers/language_provider.dart';
 import '../../providers/triage_provider.dart';
 import '../../services/slot_service.dart';
 import '../../texts/app_texts.dart';
-import '../../utils/doctor_schedule.dart';
-import '../../widgets/doctor_avatar.dart';
+import '../../widgets/doctor_mini_card.dart';
 import '../../widgets/glass_button.dart';
-import '../../widgets/glass_card.dart';
 import '../../widgets/glass_scaffold.dart';
 import '../../widgets/glass_section_title.dart';
 import 'booking_summary_card.dart';
@@ -57,8 +54,13 @@ class _BookingScreenState extends State<BookingScreen> {
     final appointments = context.read<AppointmentProvider>();
     final args = ModalRoute.of(context)?.settings.arguments;
     final doctor = args is String ? doctors.doctorById(args) : null;
+
+    // Start on the first date when the doctor sits and still has a free time.
     if (doctor != null) {
-      _date = _firstDateWithSlots(doctor, appointments);
+      _date = _slotService.firstDateWithSlots(
+        doctor: doctor,
+        isBookedByUser: (s) => appointments.isSlotTaken(doctor.id, s),
+      );
     }
 
     _nameController.text = context.read<AuthProvider>().userName;
@@ -69,25 +71,6 @@ class _BookingScreenState extends State<BookingScreen> {
         DateTime.now().difference(last.createdAt) < const Duration(hours: 2)) {
       _noteController.text = last.input.text;
     }
-  }
-
-  /// First date when the doctor sits and still has a free time.
-  DateTime? _firstDateWithSlots(
-    DoctorModel doctor,
-    AppointmentProvider appointments,
-  ) {
-    final now = DateTime.now();
-    for (var i = 0; i < AppConstants.bookingDaysAhead; i++) {
-      final date = DateTime(now.year, now.month, now.day + i);
-      if (!DoctorSchedule.sitsOn(doctor, date)) continue;
-      final slots = _slotService.slotsFor(
-        doctor: doctor,
-        date: date,
-        isBookedByUser: (s) => appointments.isSlotTaken(doctor.id, s),
-      );
-      if (slots.any((s) => s.isAvailable)) return date;
-    }
-    return null;
   }
 
   void _showMessage(String key) {
@@ -185,7 +168,7 @@ class _BookingScreenState extends State<BookingScreen> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
           children: [
-            _DoctorMini(
+            DoctorMiniCard(
               doctor: doctor,
               specialtyName: doctors.specialtyName(doctor.specialtyId),
             ),
@@ -242,62 +225,6 @@ class _BookingScreenState extends State<BookingScreen> {
         label: t('confirm_booking'),
         isLoading: _saving,
         onPressed: () => _confirm(doctor),
-      ),
-    );
-  }
-}
-
-class _DoctorMini extends StatelessWidget {
-  const _DoctorMini({required this.doctor, required this.specialtyName});
-
-  final DoctorModel doctor;
-  final String specialtyName;
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassCard(
-      blur: false,
-      radius: 20,
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          DoctorAvatar(doctor: doctor, size: 56, radius: 16, onDark: true),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  doctor.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: AppColors.onGlass,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Text(
-                  specialtyName,
-                  style: const TextStyle(
-                    color: AppColors.onGlassMuted,
-                    fontSize: 13,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  doctor.hospital,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: AppColors.onGlassMuted,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

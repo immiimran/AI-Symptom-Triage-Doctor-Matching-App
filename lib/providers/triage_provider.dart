@@ -69,6 +69,22 @@ class TriageProvider extends ChangeNotifier {
     return result;
   }
 
+  /// Removes one check from history.
+  Future<void> deleteFromHistory(TriageResult result) async {
+    _history = _history
+        .where((r) => !r.createdAt.isAtSameMomentAs(result.createdAt))
+        .toList();
+    notifyListeners();
+    await _saveHistory();
+  }
+
+  /// Removes all checks from history.
+  Future<void> clearHistory() async {
+    _history = [];
+    notifyListeners();
+    await _saveHistory();
+  }
+
   Future<void> _saveHistory() async {
     final json = jsonEncode(_history.map((r) => r.toJson()).toList());
     await _storage.saveSymptomHistoryJson(json);

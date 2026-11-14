@@ -127,7 +127,15 @@ class _SymptomScreenState extends State<SymptomScreen> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: Text(t('symptom_screen_title'))),
+      appBar: AppBar(title: Text(t('symptom_screen_title')),
+      actions: [
+          IconButton(
+            icon: const Icon(Icons.history_rounded),
+            tooltip: t('history_title'),
+            onPressed: () => Navigator.of(context).pushNamed(AppRoutes.history),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [

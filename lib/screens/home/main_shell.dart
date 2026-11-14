@@ -1,3 +1,4 @@
+import 'package:curely/screens/appoinment/appointments_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +41,7 @@ class _MainShellState extends State<MainShell> {
         index: _index,
         children: [
           const HomeScreen(),
-          PlaceholderScreen(title: t('nav_appointments')),
+          const AppointmentsScreen(),
           const SizedBox.shrink(), // Check tab opens a full screen instead.
           const FavoritesScreen(),
           PlaceholderScreen(title: t('nav_profile'), showSignOut: true),
