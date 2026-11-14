@@ -100,7 +100,8 @@ class AppointmentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Creates and saves a new appointment.
+  /// Creates and saves a new appointment. If the user chose a default
+  /// reminder in Settings, it is set right away.
   Future<AppointmentModel> book({
     required DoctorModel doctor,
     required DateTime dateTime,
@@ -124,7 +125,16 @@ class AppointmentProvider extends ChangeNotifier {
     _items = [..._items, appointment];
     notifyListeners();
     await _save();
-    return appointment;
+
+    final defaultMinutes = await _storage.getDefaultReminderMinutes();
+    if (defaultMinutes != null) {
+      await setReminder(
+        appointment: appointment,
+        doctor: doctor,
+        minutesBefore: defaultMinutes,
+      );
+    }
+    return byId(appointment.id) ?? appointment;
   }
 
   /// Cancels an appointment and its reminder.

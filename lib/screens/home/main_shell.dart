@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import '../../app/routes.dart';
 import '../../providers/language_provider.dart';
 import '../../texts/app_texts.dart';
-import '../../widgets/placeholder_screen.dart';
 import '../favorites/favorites_screen.dart';
+import '../profile/profile_screen.dart';
 import 'home_screen.dart';
 
 /// Main container with the bottom navigation bar.
@@ -44,7 +44,7 @@ class _MainShellState extends State<MainShell> {
           const AppointmentsScreen(),
           const SizedBox.shrink(), // Check tab opens a full screen instead.
           const FavoritesScreen(),
-          PlaceholderScreen(title: t('nav_profile'), showSignOut: true),
+          ProfileScreen(onSwitchTab: _onSelect),
         ],
       ),
       bottomNavigationBar: NavigationBar(

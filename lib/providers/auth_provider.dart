@@ -13,6 +13,7 @@ class AuthProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorKey;
   String? _userName;
+  String? _userEmail;
 
   bool get isLoggedIn => _isLoggedIn;
   bool get isLoading => _isLoading;
@@ -21,6 +22,7 @@ class AuthProvider extends ChangeNotifier {
   String? get errorKey => _errorKey;
 
   String get userName => _userName ?? '';
+  String get userEmail => _userEmail ?? '';
 
   /// First word of the user's name, for greetings.
   String get firstName {
@@ -33,10 +35,17 @@ class AuthProvider extends ChangeNotifier {
   Future<void> checkAuthStatus() async {
     try {
       _isLoggedIn = await _service.isSignedIn();
-      _userName = _isLoggedIn ? await _service.currentUserName() : null;
+      if (_isLoggedIn) {
+        _userName = await _service.currentUserName();
+        _userEmail = await _service.currentUserEmail();
+      } else {
+        _userName = null;
+        _userEmail = null;
+      }
     } catch (_) {
       _isLoggedIn = false;
       _userName = null;
+      _userEmail = null;
     }
     notifyListeners();
   }
@@ -55,10 +64,22 @@ class AuthProvider extends ChangeNotifier {
     );
   }
 
+  /// Changes the display name (used by Edit profile).
+  Future<void> updateName(String name) async {
+    try {
+      await _service.updateName(name);
+      _userName = name.trim();
+      notifyListeners();
+    } catch (_) {
+      // The profile still saves; only the account name stays the same.
+    }
+  }
+
   Future<void> signOut() async {
     await _service.signOut();
     _isLoggedIn = false;
     _userName = null;
+    _userEmail = null;
     notifyListeners();
   }
 
@@ -72,6 +93,7 @@ class AuthProvider extends ChangeNotifier {
       await action();
       _isLoggedIn = true;
       _userName = await _service.currentUserName();
+      _userEmail = await _service.currentUserEmail();
       return true;
     } on AuthException catch (e) {
       _errorKey = e.messageKey;

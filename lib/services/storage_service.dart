@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Simple local key-value storage (language, login, favorites, bookings).
+/// Simple local key-value storage (language, login, favorites, bookings,
+/// history, reviews, profile and settings).
 class StorageService {
   static const String _keyLoggedIn = 'is_logged_in';
   static const String _keyLanguage = 'language_code';
@@ -8,30 +9,10 @@ class StorageService {
   static const String _keyDemoEmail = 'demo_user_email';
   static const String _keyFavorites = 'favorite_doctor_ids';
   static const String _keyAppointments = 'appointments_json';
-
   static const String _keySymptomHistory = 'symptom_history_json';
-
   static const String _keyMyReviews = 'my_reviews_json';
-
-  Future<String?> getMyReviewsJson() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyMyReviews);
-  }
-
-  Future<void> saveMyReviewsJson(String json) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyMyReviews, json);
-  }
-
-  Future<String?> getSymptomHistoryJson() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keySymptomHistory);
-  }
-
-  Future<void> saveSymptomHistoryJson(String json) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keySymptomHistory, json);
-  }
+  static const String _keyProfile = 'user_profile_json';
+  static const String _keyDefaultReminder = 'default_reminder_minutes';
 
   Future<bool> getLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
@@ -94,5 +75,50 @@ class StorageService {
   Future<void> saveAppointmentsJson(String json) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyAppointments, json);
+  }
+
+  Future<String?> getSymptomHistoryJson() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keySymptomHistory);
+  }
+
+  Future<void> saveSymptomHistoryJson(String json) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keySymptomHistory, json);
+  }
+
+  Future<String?> getMyReviewsJson() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyMyReviews);
+  }
+
+  Future<void> saveMyReviewsJson(String json) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyMyReviews, json);
+  }
+
+  Future<String?> getProfileJson() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyProfile);
+  }
+
+  Future<void> saveProfileJson(String json) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyProfile, json);
+  }
+
+  /// Minutes before every new appointment, or null for no default reminder.
+  Future<int?> getDefaultReminderMinutes() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_keyDefaultReminder);
+  }
+
+  Future<void> setDefaultReminderMinutes(int? minutes) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (minutes == null) {
+      await prefs.remove(_keyDefaultReminder);
+    } else {
+      await prefs.setInt(_keyDefaultReminder, minutes);
+    }
   }
 }

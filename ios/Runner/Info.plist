@@ -3,6 +3,11 @@
 <plist version="1.0">
 <dict>
 
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Curely needs access to your photos so you can choose a profile picture.</string>
+<key>NSCameraUsageDescription</key>
+<string>Curely needs the camera so you can take a profile picture.</string>
+
 <key>NSSpeechRecognitionUsageDescription</key>
 <string>Curely uses speech recognition so you can describe your symptoms by voice.</string>
 <key>NSMicrophoneUsageDescription</key>

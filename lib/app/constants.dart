@@ -1,6 +1,9 @@
 class AppConstants {
   AppConstants._();
 
+  /// Shown in Settings > About.
+  static const String appVersion = '1.0.0';
+
   /// true = app runs with local demo data, no Firebase needed.
   static const bool demoMode = true;
 

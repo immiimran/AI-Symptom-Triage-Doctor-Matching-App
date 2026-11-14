@@ -11,7 +11,9 @@ import '../providers/appointment_provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/doctor_provider.dart';
 import '../providers/language_provider.dart';
+import '../providers/profile_provider.dart';
 import '../providers/review_provider.dart';
+import '../providers/settings_provider.dart';
 import '../providers/triage_provider.dart';
 import 'constants.dart';
 import 'routes.dart';
@@ -34,6 +36,8 @@ class CurelyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AppointmentProvider()..load()),
         ChangeNotifierProvider(create: (_) => TriageProvider()..load()),
         ChangeNotifierProvider(create: (_) => ReviewProvider()..load()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()..load()),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
         // ---- ADD NEW PROVIDERS ABOVE THIS LINE ----
       ],
       child: MaterialApp(

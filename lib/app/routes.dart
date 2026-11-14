@@ -10,6 +10,8 @@ import '../screens/doctors/doctor_list_screen.dart';
 import '../screens/history/history_screen.dart';
 import '../screens/home/main_shell.dart';
 import '../screens/onboarding/onboarding_screen.dart';
+import '../screens/profile/edit_profile_screen.dart';
+import '../screens/settings/settings_screen.dart';
 import '../screens/splash/splash_screen.dart';
 import '../screens/symptom/analyzing_screen.dart';
 import '../screens/symptom/symptom_screen.dart';
@@ -33,21 +35,25 @@ class AppRoutes {
   static const String booking = '/booking';
   static const String bookingSuccess = '/booking-success';
   static const String reschedule = '/reschedule';
+  static const String editProfile = '/edit-profile';
+  static const String settings = '/settings';
 
   static Map<String, WidgetBuilder> get routes => {
-    splash: (_) => const SplashScreen(),
-    onboarding: (_) => const OnboardingScreen(),
-    login: (_) => const LoginScreen(),
-    register: (_) => const RegisterScreen(),
-    home: (_) => const MainShell(),
-    symptom: (_) => const SymptomScreen(),
-    analyzing: (_) => const AnalyzingScreen(),
-    triageResult: (_) => const TriageResultScreen(),
-    history: (_) => const HistoryScreen(),
-    doctors: (_) => const DoctorListScreen(),
-    doctorDetails: (_) => const DoctorDetailsScreen(),
-    booking: (_) => const BookingScreen(),
-    bookingSuccess: (_) => const BookingSuccessScreen(),
-    reschedule: (_) => const RescheduleScreen(),
-  };
+        splash: (_) => const SplashScreen(),
+        onboarding: (_) => const OnboardingScreen(),
+        login: (_) => const LoginScreen(),
+        register: (_) => const RegisterScreen(),
+        home: (_) => const MainShell(),
+        symptom: (_) => const SymptomScreen(),
+        analyzing: (_) => const AnalyzingScreen(),
+        triageResult: (_) => const TriageResultScreen(),
+        history: (_) => const HistoryScreen(),
+        doctors: (_) => const DoctorListScreen(),
+        doctorDetails: (_) => const DoctorDetailsScreen(),
+        booking: (_) => const BookingScreen(),
+        bookingSuccess: (_) => const BookingSuccessScreen(),
+        reschedule: (_) => const RescheduleScreen(),
+        editProfile: (_) => const EditProfileScreen(),
+        settings: (_) => const SettingsScreen(),
+      };
 }

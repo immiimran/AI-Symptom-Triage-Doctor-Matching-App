@@ -29,6 +29,24 @@ class AuthService {
     return FirebaseAuth.instance.currentUser?.displayName;
   }
 
+  /// Email of the signed-in user, or null.
+  Future<String?> currentUserEmail() async {
+    if (AppConstants.demoMode) {
+      return _storage.getDemoUserEmail();
+    }
+    return FirebaseAuth.instance.currentUser?.email;
+  }
+
+  /// Changes the display name of the signed-in user.
+  Future<void> updateName(String name) async {
+    if (AppConstants.demoMode) {
+      final email = await _storage.getDemoUserEmail() ?? '';
+      await _storage.saveDemoUser(name: name.trim(), email: email);
+      return;
+    }
+    await FirebaseAuth.instance.currentUser?.updateDisplayName(name.trim());
+  }
+
   Future<void> signIn({required String email, required String password}) async {
     if (AppConstants.demoMode) {
       final saved = await _storage.getDemoUserEmail();
