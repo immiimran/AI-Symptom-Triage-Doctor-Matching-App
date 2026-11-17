@@ -379,4 +379,35 @@ const Map<String, String> enTexts = {
   'version': 'Version',
   'about_text': 'Curely helps you describe your symptoms, understand which kind of doctor to see, and book an appointment, in Bangla or English.',
   'about_made': 'Built with Flutter as a university project prototype.',
+
+  // ---- Notifications ----
+  'notifications_title': 'Notifications',
+  'notif_empty': 'No notifications yet',
+  'notif_empty_hint':
+      'Booking updates, reminders and health tips will appear here.',
+  'notif_clear_title': 'Clear all notifications?',
+  'notif_clear_message': 'Every notification will be removed from the list.',
+  'notif_cleared': 'Notifications cleared.',
+  'notif_welcome_title': 'Welcome to Curely',
+  'notif_welcome_body':
+      'Describe your symptoms and we will suggest the right doctor.',
+  'notif_booked_title': 'Appointment confirmed',
+  'notif_cancelled_title': 'Appointment cancelled',
+  'notif_rescheduled_title': 'Appointment rescheduled',
+  'notif_reminder_title': 'Reminder set',
+  'notif_soon_title': 'Appointment coming up',
+  'notif_tip_title': 'Health tip',
+  'time_now': 'Just now',
+  'time_min_ago': 'min ago',
+  'time_hour_ago': 'h ago',
+  'tip_daily_0': 'Drink water regularly. Mild dehydration can cause headaches and tiredness.',
+  'tip_daily_1':
+      'Wash your hands with soap before eating and after using the toilet.',
+  'tip_daily_2': 'Sleep 7-8 hours. Poor sleep makes many symptoms feel worse.',
+  'tip_daily_3': "Do not take antibiotics without a doctor's advice.",
+  'tip_daily_4': 'A walk of 20-30 minutes a day is good for your heart.',
+  'tip_daily_5':
+      'Keep old prescriptions and test reports together in one folder.',
+  'tip_daily_6': 'If a fever lasts more than three days, see a doctor.',
+  'tip_daily_7': 'Eat fruit and vegetables daily and cut down on extra salt.',
 };

@@ -1,0 +1,21 @@
+[
+  { "id": "r013", "doctor_id": "d007", "author": "Tanvir Hasan", "rating": 5, "comment": "Cured my long-time gastric problem. Very clear advice.", "date": "2026-11-03" },
+  { "id": "r014", "doctor_id": "d007", "author": "লিপি আক্তার", "rating": 4, "comment": "ভালো চিকিৎসা, তবে একটু অপেক্ষা করতে হয়।", "date": "2026-10-20" },
+  { "id": "r015", "doctor_id": "d008", "author": "Sharmin Nahar", "rating": 5, "comment": "Patient and kind. Explained my liver report well.", "date": "2026-10-29" },
+  { "id": "r016", "doctor_id": "d009", "author": "Kabir Hossain", "rating": 5, "comment": "Fixed my knee pain without unnecessary surgery.", "date": "2026-11-01" },
+  { "id": "r017", "doctor_id": "d009", "author": "রহমত উল্লাহ", "rating": 5, "comment": "কোমরের ব্যথায় অনেক উপকার পেয়েছি।", "date": "2026-10-14" },
+  { "id": "r018", "doctor_id": "d010", "author": "Nusrat Sultana", "rating": 4, "comment": "Good advice on exercises and regular follow-up.", "date": "2026-10-22" },
+  { "id": "r019", "doctor_id": "d011", "author": "Imran Khan", "rating": 5, "comment": "Treated my sinus problem quickly.", "date": "2026-10-31" },
+  { "id": "r020", "doctor_id": "d011", "author": "মিনা বেগম", "rating": 4, "comment": "কানের সমস্যায় ভালো পরামর্শ দিয়েছেন।", "date": "2026-10-08" },
+  { "id": "r021", "doctor_id": "d012", "author": "Rafiq Ahmed", "rating": 4, "comment": "Friendly doctor with a clear explanation.", "date": "2026-10-19" },
+  { "id": "r022", "doctor_id": "d013", "author": "Anwar Karim", "rating": 5, "comment": "Excellent eye check-up and honest advice.", "date": "2026-11-05" },
+  { "id": "r023", "doctor_id": "d013", "author": "শাহানা পারভীন", "rating": 5, "comment": "ছানির অপারেশনের আগে সব বুঝিয়ে বলেছেন।", "date": "2026-10-17" },
+  { "id": "r024", "doctor_id": "d014", "author": "Mitu Rahman", "rating": 4, "comment": "Quick and thorough eye test.", "date": "2026-10-26" },
+  { "id": "r025", "doctor_id": "d015", "author": "Delwar Hossain", "rating": 5, "comment": "Took time to explain my ECG and medicines.", "date": "2026-10-30" },
+  { "id": "r026", "doctor_id": "d016", "author": "Shirin Akter", "rating": 5, "comment": "Very caring and professional.", "date": "2026-11-04" },
+  { "id": "r027", "doctor_id": "d017", "author": "Mahin Chowdhury", "rating": 4, "comment": "Helped me understand and control my migraine.", "date": "2026-10-12" },
+  { "id": "r028", "doctor_id": "d018", "author": "জাহিদা বেগম", "rating": 5, "comment": "বাচ্চারা ভয় পায় না, খুব মিষ্টি ব্যবহার।", "date": "2026-11-06" },
+  { "id": "r029", "doctor_id": "d018", "author": "Ashraf Ali", "rating": 5, "comment": "Best child specialist in town.", "date": "2026-10-24" },
+  { "id": "r030", "doctor_id": "d019", "author": "Habib Ullah", "rating": 4, "comment": "Honest and affordable family doctor.", "date": "2026-10-15" },
+  { "id": "r031", "doctor_id": "d020", "author": "Sadia Islam", "rating": 5, "comment": "My skin and hair problems improved a lot.", "date": "2026-11-02" }
+]

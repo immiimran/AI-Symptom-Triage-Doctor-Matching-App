@@ -24,9 +24,23 @@ class TriageService {
     final symptomsRaw = await rootBundle.loadString(AppAssets.symptomsJson);
     final flagsRaw = await rootBundle.loadString(AppAssets.redFlagsJson);
 
-    _symptoms = (jsonDecode(symptomsRaw) as List<dynamic>)
+    final symptoms = (jsonDecode(symptomsRaw) as List<dynamic>)
         .map((e) => SymptomEntry.fromJson(e as Map<String, dynamic>))
         .toList();
+
+    // More symptoms live in a second file so they are easy to add.
+    try {
+      final moreRaw = await rootBundle.loadString(AppAssets.symptomsMoreJson);
+      final known = symptoms.map((s) => s.id).toSet();
+      for (final e in jsonDecode(moreRaw) as List<dynamic>) {
+        final entry = SymptomEntry.fromJson(e as Map<String, dynamic>);
+        if (known.add(entry.id)) symptoms.add(entry);
+      }
+    } catch (_) {
+      // The extra file is optional.
+    }
+
+    _symptoms = symptoms;
     _redFlags = (jsonDecode(flagsRaw) as List<dynamic>)
         .map((e) => RedFlag.fromJson(e as Map<String, dynamic>))
         .toList();

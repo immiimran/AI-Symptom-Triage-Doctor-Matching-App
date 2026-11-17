@@ -1,0 +1,18 @@
+[
+  { "id": "itching", "en": "Itching", "bn": "চুলকানি" },
+  { "id": "hair_fall", "en": "Hair fall", "bn": "চুল পড়া" },
+  { "id": "dry_skin", "en": "Dry skin", "bn": "শুষ্ক ত্বক" },
+  { "id": "back_pain", "en": "Back pain", "bn": "পিঠে ব্যথা" },
+  { "id": "neck_pain", "en": "Neck pain", "bn": "ঘাড় ব্যথা" },
+  { "id": "acidity", "en": "Acidity", "bn": "গ্যাস্ট্রিক" },
+  { "id": "bloating", "en": "Bloating / gas", "bn": "পেট ফাঁপা" },
+  { "id": "diarrhea", "en": "Diarrhea", "bn": "পাতলা পায়খানা" },
+  { "id": "cold", "en": "Cold / runny nose", "bn": "সর্দি" },
+  { "id": "eye_pain", "en": "Eye problem", "bn": "চোখের সমস্যা" },
+  { "id": "swelling", "en": "Swelling", "bn": "ফোলা" },
+  { "id": "weakness", "en": "Weakness", "bn": "দুর্বলতা" },
+  { "id": "insomnia", "en": "Sleeplessness", "bn": "ঘুম হয় না" },
+  { "id": "urine_burning", "en": "Burning urination", "bn": "প্রস্রাবে জ্বালা" },
+  { "id": "period_pain", "en": "Period problem", "bn": "মাসিকের সমস্যা" },
+  { "id": "high_bp", "en": "High blood pressure", "bn": "উচ্চ রক্তচাপ" }
+]

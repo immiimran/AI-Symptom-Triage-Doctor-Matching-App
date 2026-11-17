@@ -11,4 +11,9 @@ class AppAssets {
   static const String symptomsJson = 'assets/data/symptoms.json';
   static const String redFlagsJson = 'assets/data/red_flags.json';
   static const String reviewsJson = 'assets/data/reviews_seed.json';
+  static const String doctorsMoreJson = 'assets/data/doctors_more.json';
+  static const String reviewsMoreJson = 'assets/data/reviews_more.json';
+  static const String symptomsMoreJson = 'assets/data/symptoms_more.json';
+  static const String commonSymptomsMoreJson =
+      'assets/data/common_symptoms_more.json';
 }

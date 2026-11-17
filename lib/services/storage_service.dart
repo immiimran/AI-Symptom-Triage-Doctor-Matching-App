@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Simple local key-value storage (language, login, favorites, bookings,
-/// history, reviews, profile and settings).
+/// history, reviews, profile, settings and notifications).
 class StorageService {
   static const String _keyLoggedIn = 'is_logged_in';
   static const String _keyLanguage = 'language_code';
@@ -13,6 +13,7 @@ class StorageService {
   static const String _keyMyReviews = 'my_reviews_json';
   static const String _keyProfile = 'user_profile_json';
   static const String _keyDefaultReminder = 'default_reminder_minutes';
+  static const String _keyNotifications = 'notification_center_json';
 
   Future<bool> getLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
@@ -120,5 +121,16 @@ class StorageService {
     } else {
       await prefs.setInt(_keyDefaultReminder, minutes);
     }
+  }
+
+  /// The notification list and the data used to detect new events.
+  Future<String?> getNotificationCenterJson() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyNotifications);
+  }
+
+  Future<void> saveNotificationCenterJson(String json) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyNotifications, json);
   }
 }

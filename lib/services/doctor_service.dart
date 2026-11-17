@@ -19,7 +19,22 @@ class DoctorService {
   }
 
   Future<List<DoctorModel>> loadDoctors() async {
-    final raw = await rootBundle.loadString(AppAssets.doctorsJson);
+    final doctors = await _read(AppAssets.doctorsJson);
+    final known = doctors.map((d) => d.id).toSet();
+
+    // More doctors live in a second file so they are easy to add.
+    try {
+      for (final doctor in await _read(AppAssets.doctorsMoreJson)) {
+        if (known.add(doctor.id)) doctors.add(doctor);
+      }
+    } catch (_) {
+      // The extra file is optional.
+    }
+    return doctors;
+  }
+
+  Future<List<DoctorModel>> _read(String path) async {
+    final raw = await rootBundle.loadString(path);
     final list = jsonDecode(raw) as List<dynamic>;
     return list
         .map((e) => DoctorModel.fromJson(e as Map<String, dynamic>))
