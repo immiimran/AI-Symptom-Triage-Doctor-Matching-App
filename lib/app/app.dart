@@ -1,9 +1,3 @@
-// নতুন ডাক্তার যোগ: একটা { ... } block কপি করে নতুন id (d007) দিন
-// এবং কমা ঠিক রাখুন। ছবি দিতে চাইলে ছবি assets/images/doctors/ folder-এ
-// রাখুন, pubspec.yaml-এর assets-এ - assets/images/doctors/ যোগ করুন,
-// আর JSON-এ "photo": "assets/images/doctors/dr_rahim.png" লিখুন।
-// photo ফাঁকা থাকলে নামের আদ্যক্ষর দেখাবে। ছবি শুধু আপনার নিজের বা license-সহ ছবি দিন।
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +5,7 @@ import '../providers/appointment_provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/doctor_provider.dart';
 import '../providers/language_provider.dart';
+import '../providers/notification_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/review_provider.dart';
 import '../providers/settings_provider.dart';
@@ -38,6 +33,15 @@ class CurelyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ReviewProvider()..load()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()..load()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
+        // Notifications watch the appointments, so this must stay below
+        // the AppointmentProvider.
+        ChangeNotifierProxyProvider<AppointmentProvider, NotificationProvider>(
+          create: (_) => NotificationProvider()..load(),
+          update: (_, appointments, notifications) {
+            notifications!.syncAppointments(appointments.all);
+            return notifications;
+          },
+        ),
         // ---- ADD NEW PROVIDERS ABOVE THIS LINE ----
       ],
       child: MaterialApp(

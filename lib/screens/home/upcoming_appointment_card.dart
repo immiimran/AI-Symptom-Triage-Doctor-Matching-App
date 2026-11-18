@@ -6,8 +6,9 @@ import '../../models/doctor_model.dart';
 import '../../texts/app_texts.dart';
 import '../../utils/date_utils.dart';
 import '../../widgets/doctor_avatar.dart';
+import '../../widgets/glass_card.dart';
 
-/// Maroon card for the next appointment: doctor, hospital, date, time, serial.
+/// Glass card for the next appointment: doctor, hospital, date, time, serial.
 class UpcomingAppointmentCard extends StatelessWidget {
   const UpcomingAppointmentCard({
     super.key,
@@ -24,102 +25,89 @@ class UpcomingAppointmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(22),
-        onTap: onTap,
-        child: Ink(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(22),
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [AppColors.primary, AppColors.primaryDark],
-            ),
-          ),
-          child: Column(
+    return GlassCard(
+      radius: 24,
+      padding: const EdgeInsets.all(16),
+      onTap: onTap,
+      child: Column(
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  DoctorAvatar(doctor: doctor, size: 52, radius: 26),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          doctor.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Text(
-                          specialtyName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.bodySmall?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.75),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  _SerialBadge(serial: appointment.serialNumber),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Icon(
-                    Icons.local_hospital_outlined,
-                    size: 16,
-                    color: Colors.white.withValues(alpha: 0.8),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      doctor.hospital,
+              DoctorAvatar(doctor: doctor, size: 52, radius: 26, onDark: true),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      doctor.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.bodySmall?.copyWith(color: Colors.white),
+                      style: const TextStyle(
+                        color: AppColors.onGlass,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _InfoItem(
-                      icon: Icons.calendar_today_outlined,
-                      text: AppDateUtils.shortDate(appointment.dateTime),
-                    ),
-                    _InfoItem(
-                      icon: Icons.access_time_rounded,
-                      text: AppDateUtils.time(appointment.dateTime),
+                    Text(
+                      specialtyName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: AppColors.onGlassMuted,
+                        fontSize: 13,
+                      ),
                     ),
                   ],
                 ),
               ),
+              _SerialBadge(serial: appointment.serialNumber),
             ],
           ),
-        ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Icon(
+                Icons.local_hospital_outlined,
+                size: 16,
+                color: AppColors.onGlassMuted,
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  doctor.hospital,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: AppColors.onGlass,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _InfoItem(
+                  icon: Icons.calendar_today_outlined,
+                  text: AppDateUtils.fullDate(appointment.dateTime),
+                ),
+                _InfoItem(
+                  icon: Icons.access_time_rounded,
+                  text: AppDateUtils.time(appointment.dateTime),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -135,24 +123,21 @@ class _SerialBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.18),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
         children: [
           Text(
             t('serial'),
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.8),
-              fontSize: 11,
-            ),
+            style: const TextStyle(color: AppColors.onGlassMuted, fontSize: 11),
           ),
           Text(
             '#$serial',
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.onGlass,
               fontSize: 18,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w800,
             ),
           ),
         ],
@@ -171,9 +156,12 @@ class _InfoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: Colors.white),
+        Icon(icon, size: 16, color: AppColors.onGlassMuted),
         const SizedBox(width: 6),
-        Text(text, style: const TextStyle(color: Colors.white, fontSize: 13)),
+        Text(
+          text,
+          style: const TextStyle(color: AppColors.onGlass, fontSize: 13),
+        ),
       ],
     );
   }
@@ -185,35 +173,39 @@ class EmptyAppointmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppColors.greyLight),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            Icons.event_available_outlined,
-            size: 36,
-            color: AppColors.primary.withValues(alpha: 0.7),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            t('no_upcoming'),
-            style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            t('no_upcoming_hint'),
-            textAlign: TextAlign.center,
-            style: textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
-          ),
-        ],
+      child: GlassCard(
+        blur: false,
+        radius: 24,
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            const Icon(
+              Icons.event_available_outlined,
+              size: 36,
+              color: AppColors.sphereRose,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              t('no_upcoming'),
+              style: const TextStyle(
+                color: AppColors.onGlass,
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              t('no_upcoming_hint'),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: AppColors.onGlassMuted,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
