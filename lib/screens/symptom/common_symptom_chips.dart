@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../app/color.dart';
 import '../../models/common_symptom.dart';
+import '../../widgets/glass_chip.dart';
 
-/// Quick-pick symptom chips. Tapping toggles the symptom.
+/// Quick-pick symptom chips (glass). Tapping toggles the symptom.
 class CommonSymptomChips extends StatelessWidget {
   const CommonSymptomChips({
     super.key,
@@ -21,24 +21,15 @@ class CommonSymptomChips extends StatelessWidget {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: symptoms.map((symptom) {
-        final isSelected = selectedIds.contains(symptom.id);
-        return FilterChip(
-          label: Text(symptom.label),
-          selected: isSelected,
-          showCheckmark: false,
-          onSelected: (_) => onToggle(symptom),
-          backgroundColor: AppColors.surface,
-          selectedColor: AppColors.primary.withValues(alpha: 0.12),
-          side: BorderSide(
-            color: isSelected ? AppColors.primary : AppColors.greyLight,
+      children: [
+        for (final symptom in symptoms)
+          GlassChip(
+            label: symptom.label,
+            icon: selectedIds.contains(symptom.id) ? Icons.check_rounded : null,
+            selected: selectedIds.contains(symptom.id),
+            onTap: () => onToggle(symptom),
           ),
-          labelStyle: TextStyle(
-            color: isSelected ? AppColors.primary : AppColors.textDark,
-            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-          ),
-        );
-      }).toList(),
+      ],
     );
   }
 }

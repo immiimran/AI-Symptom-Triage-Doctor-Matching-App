@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/color.dart';
 import '../../app/routes.dart';
 import '../../models/onboarding_item.dart';
 import '../../providers/language_provider.dart';
 import '../../texts/app_texts.dart';
 import '../../widgets/dot_indicator.dart';
-import '../../widgets/primary_button.dart';
+import '../../widgets/glass_background.dart';
+import '../../widgets/glass_button.dart';
 import 'onboarding_setup_page.dart';
 import 'onboarding_slide.dart';
 
-/// Intro screen: three slides, then language choice and medical disclaimer.
+/// Intro screen (glass design): three slides, then language choice and
+/// the medical disclaimer.
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -37,7 +40,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ),
   ];
 
-  static const Duration _pageDuration = Duration(milliseconds: 300);
+  static const Duration _pageDuration = Duration(milliseconds: 350);
 
   final PageController _controller = PageController();
   int _page = 0;
@@ -49,14 +52,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool get _isLastPage => _page == _lastIndex;
 
   void _next() {
-    _controller.nextPage(duration: _pageDuration, curve: Curves.easeOut);
+    _controller.nextPage(duration: _pageDuration, curve: Curves.easeOutCubic);
   }
 
   void _skip() {
     _controller.animateToPage(
       _lastIndex,
       duration: _pageDuration,
-      curve: Curves.easeOut,
+      curve: Curves.easeOutCubic,
     );
   }
 
@@ -75,48 +78,66 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     // Rebuild the whole screen when the language changes.
     context.watch<LanguageProvider>();
 
+    // The last page needs the disclaimer to be accepted first.
+    final canContinue = !_isLastPage || _accepted;
+
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 48,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: _isLastPage
-                    ? null
-                    : Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: TextButton(
-                          onPressed: _skip,
-                          child: Text(t('onboarding_skip')),
+      body: GlassBackground(
+        showSilverSphere: false,
+        child: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 48,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: _isLastPage
+                      ? null
+                      : Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: TextButton(
+                            onPressed: _skip,
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppColors.onGlassMuted,
+                            ),
+                            child: Text(t('onboarding_skip')),
+                          ),
                         ),
-                      ),
+                ),
               ),
-            ),
-            Expanded(
-              child: PageView(
-                controller: _controller,
-                onPageChanged: (index) => setState(() => _page = index),
-                children: [
-                  for (final item in _items) OnboardingSlide(item: item),
-                  OnboardingSetupPage(
-                    accepted: _accepted,
-                    onAcceptedChanged: (value) =>
-                        setState(() => _accepted = value),
+              Expanded(
+                child: PageView(
+                  controller: _controller,
+                  physics: const BouncingScrollPhysics(),
+                  onPageChanged: (index) => setState(() => _page = index),
+                  children: [
+                    for (final item in _items) OnboardingSlide(item: item),
+                    OnboardingSetupPage(
+                      accepted: _accepted,
+                      onAcceptedChanged: (value) =>
+                          setState(() => _accepted = value),
+                    ),
+                  ],
+                ),
+              ),
+              DotIndicator(count: _pageCount, index: _page),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 250),
+                  opacity: canContinue ? 1 : 0.45,
+                  child: GlassButton(
+                    label: _isLastPage
+                        ? t('get_started')
+                        : t('onboarding_next'),
+                    onPressed: canContinue
+                        ? (_isLastPage ? _finish : _next)
+                        : null,
                   ),
-                ],
+                ),
               ),
-            ),
-            DotIndicator(count: _pageCount, index: _page),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-              child: PrimaryButton(
-                label: _isLastPage ? t('get_started') : t('onboarding_next'),
-                onPressed: _isLastPage ? (_accepted ? _finish : null) : _next,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

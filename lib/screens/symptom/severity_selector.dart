@@ -4,7 +4,7 @@ import '../../app/color.dart';
 import '../../models/symptom_input.dart';
 import '../../texts/app_texts.dart';
 
-/// Three colored cards: mild, moderate, severe.
+/// Three glass cards: mild, moderate, severe.
 class SeveritySelector extends StatelessWidget {
   const SeveritySelector({
     super.key,
@@ -50,33 +50,39 @@ class SeveritySelector extends StatelessWidget {
     Color color,
   ) {
     final isSelected = value == selected;
+    final radius = BorderRadius.circular(18);
 
     return Expanded(
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: radius,
         onTap: () => onSelected(value),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          duration: const Duration(milliseconds: 220),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
+            borderRadius: radius,
             color: isSelected
-                ? color.withValues(alpha: 0.12)
-                : AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
+                ? color.withValues(alpha: 0.26)
+                : AppColors.glassFill,
             border: Border.all(
-              color: isSelected ? color : AppColors.greyLight,
+              color: isSelected ? color : AppColors.glassBorder,
               width: isSelected ? 2 : 1,
             ),
           ),
           child: Column(
             children: [
-              Icon(icon, color: color, size: 30),
+              AnimatedScale(
+                scale: isSelected ? 1.15 : 1,
+                duration: const Duration(milliseconds: 260),
+                curve: Curves.easeOutBack,
+                child: Icon(icon, color: color, size: 32),
+              ),
               const SizedBox(height: 6),
               Text(
                 t(labelKey),
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: isSelected ? color : AppColors.textDark,
+                  color: AppColors.onGlass,
+                  fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                 ),
               ),
             ],

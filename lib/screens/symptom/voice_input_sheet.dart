@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/color.dart';
@@ -42,6 +43,9 @@ class _VoiceInputSheetState extends State<VoiceInputSheet>
   AppLanguage _voiceLanguage = AppTexts.current;
   String _transcript = '';
 
+  /// The error code from the speech plugin, e.g. "error_no_match".
+  String? _errorCode;
+
   @override
   void initState() {
     super.initState();
@@ -74,6 +78,7 @@ class _VoiceInputSheetState extends State<VoiceInputSheet>
     setState(() {
       _state = _VoiceState.listening;
       _transcript = '';
+      _errorCode = null;
     });
 
     try {
@@ -87,8 +92,14 @@ class _VoiceInputSheetState extends State<VoiceInputSheet>
           });
         },
       );
-    } catch (_) {
-      if (mounted) setState(() => _state = _VoiceState.error);
+    } catch (e) {
+      debugPrint('Speech start failed: $e');
+      if (mounted) {
+        setState(() {
+          _errorCode = 'listen_failed';
+          _state = _VoiceState.error;
+        });
+      }
     }
   }
 
@@ -130,10 +141,33 @@ class _VoiceInputSheetState extends State<VoiceInputSheet>
   }
 
   void _onError(String message) {
+    debugPrint('Speech error: $message');
     if (!mounted) return;
     setState(() {
+      _errorCode = message;
       _state = _transcript.isEmpty ? _VoiceState.error : _VoiceState.ready;
     });
+  }
+
+  /// Picks the text that matches the error code.
+  String _errorText() {
+    final code = (_errorCode ?? '').toLowerCase();
+    if (code.contains('permission')) return t('voice_not_available');
+    if (code.contains('language')) {
+      return _voiceLanguage == AppLanguage.bn
+          ? t('voice_bn_unsupported')
+          : t('voice_error');
+    }
+    if (code.contains('network')) return t('voice_network');
+    if (code.contains('no_match') || code.contains('speech_timeout')) {
+      return t('voice_no_speech');
+    }
+    if (code.contains('audio') ||
+        code.contains('busy') ||
+        code.contains('listen_failed')) {
+      return t('voice_mic_problem');
+    }
+    return t('voice_error');
   }
 
   String _message() {
@@ -153,7 +187,7 @@ class _VoiceInputSheetState extends State<VoiceInputSheet>
             ? t('voice_bn_unsupported')
             : t('voice_not_available');
       case _VoiceState.error:
-        return t('voice_error');
+        return _errorText();
     }
   }
 
@@ -192,6 +226,14 @@ class _VoiceInputSheetState extends State<VoiceInputSheet>
                 color: hasProblem ? AppColors.error : AppColors.textMuted,
               ),
             ),
+            // Only in debug builds: the real error code, to find problems.
+            if (kDebugMode && _errorCode != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                '[debug] $_errorCode',
+                style: textTheme.bodySmall?.copyWith(color: AppColors.error),
+              ),
+            ],
             const SizedBox(height: 24),
             _MicButton(
               isListening: isListening,

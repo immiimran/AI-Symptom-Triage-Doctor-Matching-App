@@ -44,9 +44,9 @@ class HomeScreen extends StatelessWidget {
 
   /// Opens the notification list. It may ask to switch to another tab.
   Future<void> _openNotifications(BuildContext context) async {
-    final tab = await Navigator.of(context)
-        .pushNamed<int>(AppRoutes.notifications);
-    if (tab != null) onSwitchTab(tab);
+    final result = await Navigator.of(context)
+        .pushNamed(AppRoutes.notifications);
+    if (result is int) onSwitchTab(result);
   }
 
   @override

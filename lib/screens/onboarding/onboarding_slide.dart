@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/color.dart';
 import '../../models/onboarding_item.dart';
 import '../../providers/language_provider.dart';
 import '../../texts/app_texts.dart';
 
-/// One intro slide: big icon, title and description.
+/// One intro slide (glass design): big glass icon, title and description.
 class OnboardingSlide extends StatelessWidget {
   const OnboardingSlide({super.key, required this.item});
 
@@ -15,9 +16,6 @@ class OnboardingSlide extends StatelessWidget {
   Widget build(BuildContext context) {
     // Rebuild when the language changes.
     context.watch<LanguageProvider>();
-
-    final colors = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -29,23 +27,44 @@ class OnboardingSlide extends StatelessWidget {
             height: 200,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: colors.primary.withValues(alpha: 0.1),
+              border: Border.all(color: AppColors.glassBorder),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppColors.sphereRose.withValues(alpha: 0.4),
+                  AppColors.glassButtonEnd.withValues(alpha: 0.25),
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.glassButtonStart.withValues(alpha: 0.35),
+                  blurRadius: 50,
+                  spreadRadius: 2,
+                ),
+              ],
             ),
-            child: Icon(item.icon, size: 96, color: colors.primary),
+            child: Icon(item.icon, size: 92, color: AppColors.onGlass),
           ),
           const SizedBox(height: 48),
           Text(
             t(item.titleKey),
             textAlign: TextAlign.center,
-            style: textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w700,
+            style: const TextStyle(
+              color: AppColors.onGlass,
+              fontSize: 26,
+              fontWeight: FontWeight.w800,
             ),
           ),
           const SizedBox(height: 16),
           Text(
             t(item.descriptionKey),
             textAlign: TextAlign.center,
-            style: textTheme.bodyLarge,
+            style: const TextStyle(
+              color: AppColors.onGlassMuted,
+              fontSize: 16,
+              height: 1.45,
+            ),
           ),
         ],
       ),

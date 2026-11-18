@@ -410,4 +410,7 @@ const Map<String, String> enTexts = {
       'Keep old prescriptions and test reports together in one folder.',
   'tip_daily_6': 'If a fever lasts more than three days, see a doctor.',
   'tip_daily_7': 'Eat fruit and vegetables daily and cut down on extra salt.',
+  'voice_no_speech': "We didn't hear anything. Speak after tapping the mic and check that the microphone works.",
+  'voice_network': 'Voice input needs an internet connection on some phones. Please check your connection.',
+  'voice_mic_problem': 'The microphone is not available right now. Close other apps that use it and try again.',
 };

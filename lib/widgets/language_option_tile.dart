@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Selectable language row. Reused in onboarding and settings.
+import '../app/color.dart';
+
+/// Selectable language row (glass design). Used in onboarding.
 class LanguageOptionTile extends StatelessWidget {
   const LanguageOptionTile({
     super.key,
@@ -15,21 +17,21 @@ class LanguageOptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
+    final radius = BorderRadius.circular(16);
 
     return InkWell(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: radius,
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        duration: const Duration(milliseconds: 220),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
         decoration: BoxDecoration(
+          borderRadius: radius,
           color: selected
-              ? colors.primary.withValues(alpha: 0.08)
-              : colors.surface,
-          borderRadius: BorderRadius.circular(14),
+              ? AppColors.onGlass.withValues(alpha: 0.2)
+              : AppColors.glassFill,
           border: Border.all(
-            color: selected ? colors.primary : colors.outlineVariant,
+            color: selected ? AppColors.onGlass : AppColors.glassBorder,
             width: selected ? 2 : 1,
           ),
         ),
@@ -38,13 +40,16 @@ class LanguageOptionTile extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: Theme.of(context).textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  color: AppColors.onGlass,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             Icon(
               selected ? Icons.check_circle_rounded : Icons.circle_outlined,
-              color: selected ? colors.primary : colors.outline,
+              color: selected ? AppColors.onGlass : AppColors.onGlassMuted,
             ),
           ],
         ),

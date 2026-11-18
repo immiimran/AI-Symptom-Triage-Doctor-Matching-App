@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../app/color.dart';
+import 'glass_chip.dart';
 
 /// One option for [OptionChips].
 class OptionChipItem<T> {
@@ -10,7 +10,7 @@ class OptionChipItem<T> {
   final String label;
 }
 
-/// Single-choice chips (age group, duration, ...).
+/// Single-choice glass chips (age group, duration, ...).
 class OptionChips<T> extends StatelessWidget {
   const OptionChips({
     super.key,
@@ -28,24 +28,14 @@ class OptionChips<T> extends StatelessWidget {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: options.map((option) {
-        final isSelected = option.value == selected;
-        return ChoiceChip(
-          label: Text(option.label),
-          selected: isSelected,
-          showCheckmark: false,
-          onSelected: (_) => onSelected(option.value),
-          selectedColor: AppColors.primary,
-          backgroundColor: AppColors.surface,
-          side: BorderSide(
-            color: isSelected ? AppColors.primary : AppColors.greyLight,
+      children: [
+        for (final option in options)
+          GlassChip(
+            label: option.label,
+            selected: option.value == selected,
+            onTap: () => onSelected(option.value),
           ),
-          labelStyle: TextStyle(
-            color: isSelected ? Colors.white : AppColors.textDark,
-            fontWeight: FontWeight.w600,
-          ),
-        );
-      }).toList(),
+      ],
     );
   }
 }
