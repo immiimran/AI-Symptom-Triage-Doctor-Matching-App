@@ -6,7 +6,7 @@ import 'glass_icon_button.dart';
 
 /// Page layout for glass screens: gradient background (without the light
 /// bottom sphere), title bar with back button, content, and an optional
-/// bar at the bottom.
+/// bar at the bottom. Long titles shrink to fit instead of being cut.
 class GlassScaffold extends StatelessWidget {
   const GlassScaffold({
     super.key,
@@ -45,14 +45,17 @@ class GlassScaffold extends StatelessWidget {
                       const SizedBox(width: 12),
                     ],
                     Expanded(
-                      child: Text(
-                        title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: AppColors.onGlass,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            color: AppColors.onGlass,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ),

@@ -10,6 +10,7 @@ import '../../texts/app_texts.dart';
 import '../../utils/greeting.dart';
 import '../../widgets/profile_avatar.dart';
 
+// ignore: unintended_html_in_doc_comment
 /// Profile photo, "Hello <name>", time-based greeting, language switch and
 /// the notification bell with an unread counter.
 class HomeHeader extends StatelessWidget {

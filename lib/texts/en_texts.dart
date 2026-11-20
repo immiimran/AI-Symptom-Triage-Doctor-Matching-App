@@ -413,4 +413,11 @@ const Map<String, String> enTexts = {
   'voice_no_speech': "We didn't hear anything. Speak after tapping the mic and check that the microphone works.",
   'voice_network': 'Voice input needs an internet connection on some phones. Please check your connection.',
   'voice_mic_problem': 'The microphone is not available right now. Close other apps that use it and try again.',
+  'voice_perm_denied': 'Microphone permission was not granted. Tap "Try again" and choose Allow.',
+  'voice_perm_blocked': 'Microphone permission is blocked. Open Settings and allow the microphone for Curely.',
+  'voice_no_service_android': 'This phone has no speech recognition service. Update the Google app and, in Settings, set Google voice typing as the voice input. Then tap "Try again".',
+  'voice_no_service_ios': 'Voice input could not start. In Settings allow Microphone and Speech Recognition for Curely and turn on Dictation (General > Keyboard). It may not work in the Simulator.',
+  'voice_open_settings': 'Open settings',
+  'voice_try_again': 'Try again',
+  'voice_details': 'Details',
 };

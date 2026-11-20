@@ -5,18 +5,23 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../app/color.dart';
 import '../../app/constants.dart';
 import '../../app/routes.dart';
+import '../../models/doctor_list_args.dart';
 import '../../models/triage_result.dart';
 import '../../providers/doctor_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../texts/app_texts.dart';
 import '../../utils/symptom_labels.dart';
 import '../../widgets/disclaimer_banner.dart';
-import '../../widgets/primary_button.dart';
+import '../../widgets/fade_slide_in.dart';
+import '../../widgets/glass_button.dart';
+import '../../widgets/glass_card.dart';
+import '../../widgets/glass_scaffold.dart';
+import '../../widgets/glass_section_title.dart';
 import '../../widgets/specialty_match_bar.dart';
 import 'urgency_banner.dart';
-import '../../models/doctor_list_args.dart';
 
-/// Shows the analysis: urgency, top specialties, summary and advice.
+/// Shows the analysis (glass design): urgency, top specialties, summary
+/// and advice.
 class TriageResultScreen extends StatelessWidget {
   const TriageResultScreen({super.key});
 
@@ -49,97 +54,93 @@ class TriageResultScreen extends StatelessWidget {
     final args = ModalRoute.of(context)?.settings.arguments;
 
     if (args is! TriageResult) {
-      return Scaffold(
-        appBar: AppBar(title: Text(t('result_title'))),
-        body: Center(child: Text(t('analyzing_error'))),
+      return GlassScaffold(
+        title: t('result_title'),
+        body: Center(
+          child: Text(
+            t('analyzing_error'),
+            style: const TextStyle(color: AppColors.onGlass),
+          ),
+        ),
       );
     }
     final result = args;
-    final textTheme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t('result_title'))),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-                children: [
-                  UrgencyBanner(
-                    urgency: result.urgency,
-                    onCall: () => _callEmergency(context),
-                  ),
-                  const SizedBox(height: 20),
-                  if (result.noMatch) ...[
-                    const _NoMatchCard(),
-                    const SizedBox(height: 20),
-                  ],
-                  _SectionTitle(t('suggested_specialties')),
-                  const SizedBox(height: 12),
-                  for (var i = 0; i < result.matches.length; i++)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: SpecialtyMatchBar(
-                        specialtyId: result.matches[i].specialtyId,
-                        name: doctors.specialtyName(
-                          result.matches[i].specialtyId,
-                        ),
-                        percent: result.matches[i].percent,
-                        isTop: i == 0 && !result.noMatch,
-                      ),
-                    ),
-                  Text(
-                    t('match_note'),
-                    style: textTheme.bodySmall?.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  _SectionTitle(t('your_symptoms')),
-                  const SizedBox(height: 12),
-                  _SummaryCard(result: result),
-                  const SizedBox(height: 24),
-                  const _AdviceCard(),
-                  const SizedBox(height: 20),
-                  const DisclaimerBanner(),
-                ],
-              ),
+    return GlassScaffold(
+      title: t('result_title'),
+      body: ListView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+        children: [
+          FadeSlideIn(
+            child: UrgencyBanner(
+              urgency: result.urgency,
+              onCall: () => _callEmergency(context),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  PrimaryButton(
-                    label: t('find_doctors'),
-                    onPressed: () => _findDoctors(context, result),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(t('check_again')),
-                  ),
-                ],
-              ),
-            ),
+          ),
+          const SizedBox(height: 20),
+          if (result.noMatch) ...[
+            const _NoMatchCard(),
+            const SizedBox(height: 20),
           ],
-        ),
+          FadeSlideIn(
+            delay: const Duration(milliseconds: 80),
+            child: GlassSectionTitle(t('suggested_specialties')),
+          ),
+          const SizedBox(height: 12),
+          for (var i = 0; i < result.matches.length; i++)
+            FadeSlideIn(
+              delay: Duration(milliseconds: 120 + i * 70),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: SpecialtyMatchBar(
+                  specialtyId: result.matches[i].specialtyId,
+                  name: doctors.specialtyName(result.matches[i].specialtyId),
+                  percent: result.matches[i].percent,
+                  isTop: i == 0 && !result.noMatch,
+                ),
+              ),
+            ),
+          Text(
+            t('match_note'),
+            style: const TextStyle(color: AppColors.onGlassMuted, fontSize: 12),
+          ),
+          const SizedBox(height: 24),
+          FadeSlideIn(
+            delay: const Duration(milliseconds: 340),
+            child: GlassSectionTitle(t('your_symptoms')),
+          ),
+          const SizedBox(height: 12),
+          FadeSlideIn(
+            delay: const Duration(milliseconds: 380),
+            child: _SummaryCard(result: result),
+          ),
+          const SizedBox(height: 24),
+          FadeSlideIn(
+            delay: const Duration(milliseconds: 420),
+            child: const _AdviceCard(),
+          ),
+          const SizedBox(height: 20),
+          FadeSlideIn(
+            delay: const Duration(milliseconds: 460),
+            child: const DisclaimerBanner(),
+          ),
+        ],
       ),
-    );
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: Theme.of(context).textTheme.titleMedium
-          ?.copyWith(fontWeight: FontWeight.w700),
+      bottom: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GlassButton(
+            label: t('find_doctors'),
+            onPressed: () => _findDoctors(context, result),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: TextButton.styleFrom(foregroundColor: AppColors.onGlass),
+            child: Text(t('check_again')),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -153,37 +154,37 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final input = result.input;
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.greyLight),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '"${input.text}"',
-            style: const TextStyle(
-              fontStyle: FontStyle.italic,
-              color: AppColors.textDark,
+      child: GlassCard(
+        blur: false,
+        radius: 20,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '"${input.text}"',
+              style: const TextStyle(
+                color: AppColors.onGlass,
+                fontStyle: FontStyle.italic,
+                height: 1.4,
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final symptom in result.matchedSymptoms)
-                _InfoChip(text: symptom.name, highlighted: true),
-              _InfoChip(text: ageLabel(input.ageGroup)),
-              _InfoChip(text: durationLabel(input.duration)),
-              _InfoChip(text: severityLabel(input.severity)),
-            ],
-          ),
-        ],
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final symptom in result.matchedSymptoms)
+                  _InfoChip(text: symptom.name, highlighted: true),
+                _InfoChip(text: ageLabel(input.ageGroup)),
+                _InfoChip(text: durationLabel(input.duration)),
+                _InfoChip(text: severityLabel(input.severity)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -201,11 +202,11 @@ class _InfoChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: highlighted
-            ? AppColors.primary.withValues(alpha: 0.1)
-            : AppColors.background,
+            ? AppColors.sphereRose.withValues(alpha: 0.25)
+            : AppColors.glassFill,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: highlighted ? AppColors.primary : AppColors.greyLight,
+          color: highlighted ? AppColors.sphereRose : AppColors.glassBorder,
         ),
       ),
       child: Text(
@@ -213,7 +214,7 @@ class _InfoChip extends StatelessWidget {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: highlighted ? AppColors.primary : AppColors.textMuted,
+          color: highlighted ? AppColors.onGlass : AppColors.onGlassMuted,
         ),
       ),
     );
@@ -227,36 +228,43 @@ class _AdviceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.greyLight),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _SectionTitle(t('advice_title')),
-          const SizedBox(height: 12),
-          for (final key in _tipKeys)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Icons.check_circle_outline_rounded,
-                    size: 18,
-                    color: AppColors.primary,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(t(key))),
-                ],
+      child: GlassCard(
+        blur: false,
+        radius: 20,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GlassSectionTitle(t('advice_title')),
+            const SizedBox(height: 12),
+            for (final key in _tipKeys)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.check_circle_outline_rounded,
+                      size: 18,
+                      color: AppColors.sphereRose,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        t(key),
+                        style: const TextStyle(
+                          color: AppColors.onGlass,
+                          height: 1.35,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -267,17 +275,14 @@ class _NoMatchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GlassCard(
+      blur: false,
+      radius: 20,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.warning.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.warning.withValues(alpha: 0.5)),
-      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.info_outline_rounded, color: AppColors.urgent),
+          const Icon(Icons.info_outline_rounded, color: AppColors.star),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -285,10 +290,19 @@ class _NoMatchCard extends StatelessWidget {
               children: [
                 Text(
                   t('no_match_title'),
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                    color: AppColors.onGlass,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 4),
-                Text(t('no_match_text')),
+                Text(
+                  t('no_match_text'),
+                  style: const TextStyle(
+                    color: AppColors.onGlassMuted,
+                    height: 1.4,
+                  ),
+                ),
               ],
             ),
           ),

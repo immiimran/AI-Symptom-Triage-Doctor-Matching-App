@@ -8,15 +8,18 @@ import '../../models/symptom_input.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/triage_provider.dart';
 import '../../texts/app_texts.dart';
+import '../../widgets/glass_button.dart';
+import '../../widgets/glass_icon_button.dart';
+import '../../widgets/glass_scaffold.dart';
+import '../../widgets/glass_section_title.dart';
 import '../../widgets/option_chips.dart';
-import '../../widgets/primary_button.dart';
 import 'common_symptom_chips.dart';
 import 'severity_selector.dart';
 import 'symptom_text_box.dart';
 import 'voice_input_sheet.dart';
 
-/// Main feature screen: the user describes symptoms by typing, tapping
-/// chips or speaking, then taps "Analyze".
+/// Main feature screen (glass design): the user describes symptoms by
+/// typing, tapping chips or speaking, then taps "Analyze".
 class SymptomScreen extends StatefulWidget {
   const SymptomScreen({super.key});
 
@@ -124,128 +127,87 @@ class _SymptomScreenState extends State<SymptomScreen> {
     // Rebuild when the language changes.
     context.watch<LanguageProvider>();
     final symptoms = context.watch<TriageProvider>().commonSymptoms;
-    final textTheme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t('symptom_screen_title')),
+    return GlassScaffold(
+      title: t('symptom_screen_title'),
       actions: [
-          IconButton(
-            icon: const Icon(Icons.history_rounded),
-            tooltip: t('history_title'),
-            onPressed: () => Navigator.of(context).pushNamed(AppRoutes.history),
+        GlassIconButton(
+          icon: Icons.history_rounded,
+          onTap: () => Navigator.of(context).pushNamed(AppRoutes.history),
+        ),
+      ],
+      body: ListView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+        children: [
+          Text(
+            t('symptom_screen_intro'),
+            style: const TextStyle(color: AppColors.onGlassMuted, height: 1.4),
+          ),
+          const SizedBox(height: 16),
+          SymptomTextBox(
+            controller: _controller,
+            hint: t('symptom_input_hint'),
+            onMicTap: _openVoice,
+            onClear: _clear,
+          ),
+          const SizedBox(height: 24),
+          GlassSectionTitle(t('common_symptoms')),
+          const SizedBox(height: 12),
+          CommonSymptomChips(
+            symptoms: symptoms,
+            selectedIds: _selectedIds,
+            onToggle: _toggleChip,
+          ),
+          const SizedBox(height: 24),
+          GlassSectionTitle(t('age_group_title')),
+          const SizedBox(height: 12),
+          OptionChips<AgeGroup>(
+            options: [
+              OptionChipItem(AgeGroup.child, t('age_child')),
+              OptionChipItem(AgeGroup.adult, t('age_adult')),
+              OptionChipItem(AgeGroup.senior, t('age_senior')),
+            ],
+            selected: _age,
+            onSelected: (value) => setState(() => _age = value),
+          ),
+          const SizedBox(height: 24),
+          GlassSectionTitle(t('duration_title')),
+          const SizedBox(height: 12),
+          OptionChips<SymptomDuration>(
+            options: [
+              OptionChipItem(SymptomDuration.underOneDay, t('duration_lt_day')),
+              OptionChipItem(SymptomDuration.oneToThreeDays, t('duration_1_3')),
+              OptionChipItem(
+                SymptomDuration.fourToSevenDays,
+                t('duration_4_7'),
+              ),
+              OptionChipItem(SymptomDuration.overWeek, t('duration_gt_week')),
+            ],
+            selected: _duration,
+            onSelected: (value) => setState(() => _duration = value),
+          ),
+          const SizedBox(height: 24),
+          GlassSectionTitle(t('severity_title')),
+          const SizedBox(height: 12),
+          SeveritySelector(
+            selected: _severity,
+            onSelected: (value) => setState(() => _severity = value),
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-                children: [
-                  Text(
-                    t('symptom_screen_intro'),
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SymptomTextBox(
-                    controller: _controller,
-                    hint: t('symptom_input_hint'),
-                    onMicTap: _openVoice,
-                    onClear: _clear,
-                  ),
-                  const SizedBox(height: 24),
-                  _SectionLabel(t('common_symptoms')),
-                  const SizedBox(height: 12),
-                  CommonSymptomChips(
-                    symptoms: symptoms,
-                    selectedIds: _selectedIds,
-                    onToggle: _toggleChip,
-                  ),
-                  const SizedBox(height: 24),
-                  _SectionLabel(t('age_group_title')),
-                  const SizedBox(height: 12),
-                  OptionChips<AgeGroup>(
-                    options: [
-                      OptionChipItem(AgeGroup.child, t('age_child')),
-                      OptionChipItem(AgeGroup.adult, t('age_adult')),
-                      OptionChipItem(AgeGroup.senior, t('age_senior')),
-                    ],
-                    selected: _age,
-                    onSelected: (value) => setState(() => _age = value),
-                  ),
-                  const SizedBox(height: 24),
-                  _SectionLabel(t('duration_title')),
-                  const SizedBox(height: 12),
-                  OptionChips<SymptomDuration>(
-                    options: [
-                      OptionChipItem(
-                        SymptomDuration.underOneDay,
-                        t('duration_lt_day'),
-                      ),
-                      OptionChipItem(
-                        SymptomDuration.oneToThreeDays,
-                        t('duration_1_3'),
-                      ),
-                      OptionChipItem(
-                        SymptomDuration.fourToSevenDays,
-                        t('duration_4_7'),
-                      ),
-                      OptionChipItem(
-                        SymptomDuration.overWeek,
-                        t('duration_gt_week'),
-                      ),
-                    ],
-                    selected: _duration,
-                    onSelected: (value) => setState(() => _duration = value),
-                  ),
-                  const SizedBox(height: 24),
-                  _SectionLabel(t('severity_title')),
-                  const SizedBox(height: 12),
-                  SeveritySelector(
-                    selected: _severity,
-                    onSelected: (value) => setState(() => _severity = value),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  PrimaryButton(label: t('analyze_button'), onPressed: _submit),
-                  const SizedBox(height: 8),
-                  Text(
-                    t('symptom_disclaimer_short'),
-                    textAlign: TextAlign.center,
-                    style: textTheme.bodySmall?.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      bottom: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GlassButton(label: t('analyze_button'), onPressed: _submit),
+          const SizedBox(height: 8),
+          Text(
+            t('symptom_disclaimer_short'),
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: AppColors.onGlassMuted, fontSize: 12),
+          ),
+        ],
       ),
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: Theme.of(context).textTheme.titleMedium
-          ?.copyWith(fontWeight: FontWeight.w700),
     );
   }
 }

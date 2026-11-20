@@ -8,8 +8,9 @@ import '../../models/triage_result.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/triage_provider.dart';
 import '../../texts/app_texts.dart';
+import '../../widgets/glass_background.dart';
 
-/// Short loading screen shown while the triage engine runs.
+/// Short loading screen (glass design) shown while the triage engine runs.
 /// Then it opens the result screen.
 class AnalyzingScreen extends StatefulWidget {
   const AnalyzingScreen({super.key});
@@ -79,59 +80,77 @@ class _AnalyzingScreenState extends State<AnalyzingScreen> {
   Widget build(BuildContext context) {
     // Rebuild when the language changes.
     context.watch<LanguageProvider>();
-    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 140,
-                  height: 140,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox.expand(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 5,
-                          color: AppColors.primary,
-                          backgroundColor: AppColors.primary.withValues(
-                            alpha: 0.12,
+      body: GlassBackground(
+        showSilverSphere: false,
+        child: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.glassFill,
+                      border: Border.all(color: AppColors.glassBorder),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.glassButtonStart.withValues(
+                            alpha: 0.4,
+                          ),
+                          blurRadius: 50,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: 128,
+                          height: 128,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 5,
+                            color: AppColors.onGlass,
+                            backgroundColor: AppColors.onGlass.withValues(
+                              alpha: 0.15,
+                            ),
                           ),
                         ),
-                      ),
-                      const Icon(
-                        Icons.auto_awesome_rounded,
-                        size: 56,
-                        color: AppColors.primary,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 32),
-                Text(
-                  t('analyzing_title'),
-                  textAlign: TextAlign.center,
-                  style: textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: Text(
-                    t(_stepKeys[_step]),
-                    key: ValueKey(_step),
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textMuted,
+                        const Icon(
+                          Icons.auto_awesome_rounded,
+                          size: 54,
+                          color: AppColors.onGlass,
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 32),
+                  Text(
+                    t('analyzing_title'),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: AppColors.onGlass,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: Text(
+                      t(_stepKeys[_step]),
+                      key: ValueKey(_step),
+                      style: const TextStyle(color: AppColors.onGlassMuted),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../app/color.dart';
 import '../texts/app_texts.dart';
 import '../utils/specialty_icons.dart';
+import 'glass_card.dart';
 
-/// One specialty with an animated percentage bar.
+/// One specialty with an animated percentage bar (glass design).
 class SpecialtyMatchBar extends StatelessWidget {
   const SpecialtyMatchBar({
     super.key,
@@ -21,33 +22,30 @@ class SpecialtyMatchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return Container(
+    return GlassCard(
+      blur: false,
+      radius: 20,
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: isTop ? AppColors.primary : AppColors.greyLight,
-          width: isTop ? 1.5 : 1,
-        ),
-      ),
       child: Column(
         children: [
           Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 42,
+                height: 42,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
+                  color: isTop
+                      ? AppColors.sphereRose.withValues(alpha: 0.3)
+                      : Colors.white.withValues(alpha: 0.12),
+                  border: Border.all(
+                    color: isTop ? AppColors.sphereRose : AppColors.glassBorder,
+                  ),
                 ),
                 child: Icon(
                   SpecialtyIcons.of(specialtyId),
                   size: 22,
-                  color: AppColors.primary,
+                  color: AppColors.onGlass,
                 ),
               ),
               const SizedBox(width: 12),
@@ -57,15 +55,19 @@ class SpecialtyMatchBar extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                        color: AppColors.onGlass,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     if (isTop)
                       Text(
                         t('best_match'),
-                        style: textTheme.bodySmall?.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
+                        style: const TextStyle(
+                          color: AppColors.sphereRose,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                   ],
@@ -73,9 +75,10 @@ class SpecialtyMatchBar extends StatelessWidget {
               ),
               Text(
                 '$percent%',
-                style: textTheme.titleMedium?.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w700,
+                style: const TextStyle(
+                  color: AppColors.onGlass,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ],
@@ -83,16 +86,16 @@ class SpecialtyMatchBar extends StatelessWidget {
           const SizedBox(height: 12),
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: percent / 100),
-            duration: const Duration(milliseconds: 700),
-            curve: Curves.easeOut,
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.easeOutCubic,
             builder: (context, value, _) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: LinearProgressIndicator(
                   value: value,
                   minHeight: 8,
-                  color: AppColors.primary,
-                  backgroundColor: AppColors.greyLight.withValues(alpha: 0.6),
+                  color: isTop ? AppColors.sphereRose : AppColors.onGlass,
+                  backgroundColor: AppColors.onGlass.withValues(alpha: 0.15),
                 ),
               );
             },

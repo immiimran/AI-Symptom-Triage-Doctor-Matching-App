@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../app/color.dart';
 import '../../texts/app_texts.dart';
+import '../../widgets/glass_card.dart';
 
-/// Big text box for describing symptoms, with Clear and Speak buttons.
+/// Big glass text box for describing symptoms, with Clear and Speak buttons.
 class SymptomTextBox extends StatelessWidget {
   const SymptomTextBox({
     super.key,
@@ -20,12 +21,12 @@ class SymptomTextBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.greyLight),
-      ),
+    final buttonRadius = BorderRadius.circular(20);
+
+    return GlassCard(
+      blur: false,
+      radius: 24,
+      padding: EdgeInsets.zero,
       child: Column(
         children: [
           TextField(
@@ -34,11 +35,15 @@ class SymptomTextBox extends StatelessWidget {
             maxLines: 8,
             keyboardType: TextInputType.multiline,
             textCapitalization: TextCapitalization.sentences,
+            style: const TextStyle(color: AppColors.onGlass, fontSize: 16),
+            cursorColor: AppColors.onGlass,
             decoration: InputDecoration(
               border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
               hintText: hint,
-              hintStyle: const TextStyle(color: AppColors.textMuted),
-              contentPadding: const EdgeInsets.all(16),
+              hintStyle: const TextStyle(color: AppColors.onGlassMuted),
+              contentPadding: const EdgeInsets.all(18),
             ),
           ),
           Padding(
@@ -54,16 +59,53 @@ class SymptomTextBox extends StatelessWidget {
                       icon: const Icon(Icons.close_rounded, size: 18),
                       label: Text(t('clear')),
                       style: TextButton.styleFrom(
-                        foregroundColor: AppColors.textMuted,
+                        foregroundColor: AppColors.onGlassMuted,
                       ),
                     );
                   },
                 ),
                 const Spacer(),
-                FilledButton.icon(
-                  onPressed: onMicTap,
-                  icon: const Icon(Icons.mic_rounded),
-                  label: Text(t('tap_to_speak')),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: buttonRadius,
+                    onTap: onMicTap,
+                    child: Ink(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: buttonRadius,
+                        gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            AppColors.glassButtonStart,
+                            AppColors.glassButtonEnd,
+                          ],
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.mic_rounded,
+                            color: AppColors.onGlass,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            t('tap_to_speak'),
+                            style: const TextStyle(
+                              color: AppColors.onGlass,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
