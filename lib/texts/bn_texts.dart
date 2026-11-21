@@ -417,4 +417,6 @@ const Map<String, String> bnTexts = {
   'voice_open_settings': 'সেটিংস খুলুন',
   'voice_try_again': 'আবার চেষ্টা',
   'voice_details': 'বিবরণ',
+  'voice_ios_stopped': 'iOS ভয়েস ইনপুট বন্ধ করে দিয়েছে। iOS Simulator-এ এটা প্রায়ই হয়। আসল iPhone-এ চেষ্টা করুন, অথবা লিখে লক্ষণ জানান।',
+  'voice_init_timeout': 'এই ফোনের speech সেবা সাড়া দেয়নি। Google অ্যাপ আপডেট করুন, Gboard-এর ভয়েস টাইপিং চলে কিনা দেখুন, তারপর "আবার চেষ্টা" চাপুন।',
 };

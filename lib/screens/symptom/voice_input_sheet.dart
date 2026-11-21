@@ -160,6 +160,8 @@ class _VoiceInputSheetState extends State<VoiceInputSheet>
   /// Picks the text that matches the error code.
   String _errorText() {
     final code = (_errorCode ?? '').toLowerCase();
+    final isIos = defaultTargetPlatform == TargetPlatform.iOS;
+
     if (code.contains('permission')) return t('voice_perm_blocked');
     if (code.contains('language')) {
       return _voiceLanguage == AppLanguage.bn
@@ -175,17 +177,23 @@ class _VoiceInputSheetState extends State<VoiceInputSheet>
         code.contains('listen_failed')) {
       return t('voice_mic_problem');
     }
+    // On iOS an unknown error right after starting is typical for the
+    // Simulator.
+    if (isIos && code.contains('error_unknown')) return t('voice_ios_stopped');
     return t('voice_error');
   }
 
   /// Message for when the speech service could not start at all.
   String _unavailableText() {
+    final code = (_errorCode ?? '').toLowerCase();
+
     switch (_initStatus) {
       case SpeechInitStatus.permissionDenied:
         return t('voice_perm_denied');
       case SpeechInitStatus.permissionBlocked:
         return t('voice_perm_blocked');
       case SpeechInitStatus.notAvailable:
+        if (code.contains('timeout')) return t('voice_init_timeout');
         return defaultTargetPlatform == TargetPlatform.android
             ? t('voice_no_service_android')
             : t('voice_no_service_ios');

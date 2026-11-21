@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -15,16 +17,20 @@ enum SpeechInitStatus {
   /// Microphone permission is blocked: only the phone Settings can fix it.
   permissionBlocked,
 
-  /// The phone has no speech recognition service, or it is turned off.
+  /// The phone has no speech recognition service, or it did not answer.
   notAvailable,
 }
 
 /// Wrapper around the speech_to_text plugin (voice input).
 /// It is a singleton because the plugin can only be initialised once.
+/// Every step has a time limit, so the screen never waits forever.
 class SpeechService {
   SpeechService._();
 
   static final SpeechService instance = SpeechService._();
+
+  static const Duration _initTimeout = Duration(seconds: 8);
+  static const Duration _localesTimeout = Duration(seconds: 3);
 
   final SpeechToText _speech = SpeechToText();
   bool _initialized = false;
@@ -42,41 +48,62 @@ class SpeechService {
     if (_initialized) return SpeechInitStatus.ready;
     lastError = null;
 
+    // Android: ask for the microphone ourselves, so the dialog always shows.
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      var mic = await Permission.microphone.status;
+      if (!mic.isGranted) mic = await Permission.microphone.request();
+      if (mic.isPermanentlyDenied) return SpeechInitStatus.permissionBlocked;
+      if (!mic.isGranted) return SpeechInitStatus.permissionDenied;
+    }
+
     try {
-      _initialized = await _speech.initialize(
-        onStatus: (status) => onStatus?.call(status),
-        onError: (error) {
-          lastError = error.errorMsg;
-          onError?.call(error.errorMsg);
-        },
-        debugLogging: kDebugMode,
-      );
+      _initialized = await _speech
+          .initialize(
+            onStatus: (status) => onStatus?.call(status),
+            onError: (error) {
+              lastError = error.errorMsg;
+              onError?.call(error.errorMsg);
+            },
+            debugLogging: kDebugMode,
+          )
+          .timeout(
+            _initTimeout,
+            onTimeout: () {
+              lastError = 'initialize timeout';
+              return false;
+            },
+          );
     } catch (e) {
       lastError = e.toString();
       _initialized = false;
     }
 
-    if (_initialized) {
-      _locales = await _speech.locales();
-      return SpeechInitStatus.ready;
-    }
+    if (!_initialized) return SpeechInitStatus.notAvailable;
 
-    // Failed. On Android we can check the microphone permission directly.
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      final mic = await Permission.microphone.status;
-      if (mic.isPermanentlyDenied) return SpeechInitStatus.permissionBlocked;
-      if (!mic.isGranted) return SpeechInitStatus.permissionDenied;
+    // Some phones never answer the language list. Then we use defaults.
+    try {
+      _locales = await _speech.locales().timeout(
+        _localesTimeout,
+        onTimeout: () {
+          debugPrint('locales() timed out, using default languages');
+          return <LocaleName>[];
+        },
+      );
+    } catch (_) {
+      _locales = const [];
     }
-    return SpeechInitStatus.notAvailable;
+    return SpeechInitStatus.ready;
   }
 
   /// Opens the phone's Settings page for this app.
   Future<void> openSettings() => openAppSettings();
 
-  /// Finds the best locale id for [language], or null if the device does
-  /// not support it (for example Bangla on some phones).
+  /// Finds the best locale id for [language].
+  /// If the phone did not give a language list, a standard id is returned.
   String? resolveLocale(AppLanguage language) {
     final isBangla = language == AppLanguage.bn;
+    if (_locales.isEmpty) return isBangla ? 'bn_BD' : 'en_US';
+
     final preferred = isBangla ? 'bn_bd' : 'en_us';
     final prefix = isBangla ? 'bn' : 'en';
 

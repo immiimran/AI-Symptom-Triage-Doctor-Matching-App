@@ -420,4 +420,6 @@ const Map<String, String> enTexts = {
   'voice_open_settings': 'Open settings',
   'voice_try_again': 'Try again',
   'voice_details': 'Details',
+  'voice_ios_stopped': 'Voice input was stopped by iOS. This often happens in the iOS Simulator. Please try on a real iPhone, or type your symptoms.',
+  'voice_init_timeout': 'The speech service of this phone did not answer. Update the Google app, check that Gboard voice typing works, then tap "Try again".',
 };
