@@ -14,6 +14,10 @@ Future<void> main() async {
   if (!AppConstants.demoMode) {
     await Firebase.initializeApp();
   }
+  // [Onboarding] Load the saved language before the first frame.
+  // [Onboarding] Load the saved language before the first frame.
+  // [Onboarding] Load the saved language before the first frame.
+  // [Onboarding] Load the saved language before the first frame.
 
   // [Onboarding] Load the saved language before the first frame.
   final languageProvider = LanguageProvider();
